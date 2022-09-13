@@ -13,7 +13,7 @@ namespace Towers
         [SerializeField]
         private GameObject towerParent;
 
-        [CanBeNull] private TowerFactory _towerFactory = null;
+        private TowerFactory _towerFactory;
 
         public void Start()
         {
@@ -22,9 +22,6 @@ namespace Towers
 
         public void InstantiateTower(int type)
         {
-            if (_towerFactory == null)
-                return;
-
             if (!_towerFactory.CreateTower(type, out var tower))
             {
                 return;

@@ -25,7 +25,7 @@ namespace Towers
         #region Xp Stats
         
         // Xp stats
-        [SerializeField] private int currentXp;
+        private int currentXp;
         // Xp needed to lvl up
         [SerializeField] private int neededXp;
         // Xp increment to the neededXp after leveling up

@@ -301,7 +301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85c4c9e551924158970990f5876e2c1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _towertypes: 01000000
+  _towerTypes: 01000000
   _baseTowers:
   - {fileID: 1853128435}
 --- !u!1 &519420028
@@ -1210,9 +1210,8 @@ MonoBehaviour:
   baseDamage: 10
   baseSpeed: 1
   reachRadius: 5
-  currentXp: 0
-  neededXp: 0
-  xpIncOnLvlUp: 0
+  neededXp: 500
+  xpIncOnLvlUp: 10
 --- !u!212 &1853128438
 SpriteRenderer:
   m_ObjectHideFlags: 0
