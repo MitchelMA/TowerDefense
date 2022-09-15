@@ -69,6 +69,11 @@ namespace Towers
 
         #endregion
 
+        /// <summary>
+        /// The Start method of the BaseTower should always be called with
+        /// `base.Start()` when overriding. This is because the Start method
+        /// of this base class initializes protected fields
+        /// </summary>
         public virtual void Start()
         {
             CurrentStats = new Stats
@@ -143,6 +148,11 @@ namespace Towers
                 AfterLevelUp(lvlups);
             }
             return lvlups;
+        }
+
+        protected void ResetTowerType()
+        {
+            _type = TowerType.Unset;
         }
     }
 }

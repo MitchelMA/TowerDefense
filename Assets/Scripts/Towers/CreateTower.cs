@@ -22,18 +22,12 @@ namespace Towers
 
         public void InstantiateTower(int type)
         {
-            if (!_towerFactory.CreateTower(type, out var tower))
+            if (!_towerFactory.CreateTower(type, out GameObject tower))
             {
                 return;
             }
 
-            var instantiatedTower = Instantiate(tower, towerParent.transform);
-            BaseTower instantiatedTowerBase;
-            if (instantiatedTower.TryGetComponent(out instantiatedTowerBase))
-            {
-                instantiatedTowerBase.Type = (BaseTower.TowerType) type;
-            }
-            
+            Instantiate(tower, towerParent.transform);
         }
     }
 }

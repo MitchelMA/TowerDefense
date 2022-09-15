@@ -301,8 +301,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85c4c9e551924158970990f5876e2c1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _towerTypes: 01000000
-  _baseTowers:
+  towerTypes: 01000000
+  baseTowers:
   - {fileID: 1853128435}
 --- !u!1 &519420028
 GameObject:
@@ -1188,7 +1188,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1853128435}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -11.607305}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

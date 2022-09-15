@@ -7,26 +7,26 @@ namespace Towers
 {
     public class TowerFactory : MonoBehaviour
     {
-        [SerializeField] private BaseTower.TowerType[] _towerTypes = new BaseTower.TowerType[3];
-        [SerializeField] private GameObject[] _baseTowers = new GameObject[3];
+        [SerializeField] private BaseTower.TowerType[] towerTypes = new BaseTower.TowerType[3];
+        [SerializeField] private GameObject[] baseTowers = new GameObject[3];
 
-        private bool CreateTower(BaseTower.TowerType type, out GameObject tower)
+        public bool CreateTower(BaseTower.TowerType type, out GameObject tower)
         {
-            if (_towerTypes.Length != _baseTowers.Length)
+            if (towerTypes.Length != baseTowers.Length)
             {
-                Debug.LogError($"The type array and the object array aren't of the same length:\n_towertypes: {_towerTypes.Length}, _baseTowers: {_baseTowers.Length}", this);
-                tower = null;
+                Debug.LogError($"The type array and the object array aren't of the same length:\n_towertypes: {towerTypes.Length}, _baseTowers: {baseTowers.Length}", this);
+                tower = default;
                 return false;
             }
-            int index = Array.IndexOf(_towerTypes, type);
+            int index = Array.IndexOf(towerTypes, type);
             if (index == -1)
             {
                 Debug.LogError($"TowerType of Type {type} could not be found", this);
-                tower = null;
+                tower = default;
                 return false;
             }
 
-            tower = _baseTowers[index];
+            tower = baseTowers[index];
             return true;
         }
 
