@@ -74,7 +74,7 @@ namespace Towers
         /// `base.Start()` when overriding. This is because the Start method
         /// of this base class initializes protected fields
         /// </summary>
-        public virtual void Start()
+        protected virtual void Start()
         {
             CurrentStats = new Stats
             {

@@ -5,7 +5,7 @@ namespace Towers.Fire
     // Additions to the Fire Tower in this file
     public partial class FireTower
     {
-        public override void Start()
+        protected override void Start()
         {
             // Call the base class' Start method
             base.Start();

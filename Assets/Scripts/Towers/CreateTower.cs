@@ -17,7 +17,10 @@ namespace Towers
 
         public void Start()
         {
-            factoryGameObj.TryGetComponent(out _towerFactory);
+            if (!factoryGameObj.TryGetComponent(out _towerFactory))
+            {
+                Debug.LogError($"The Factory Game Object didn't contain a Component of Type {typeof(TowerFactory)}", this);
+            }
         }
 
         public void InstantiateTower(int type)
