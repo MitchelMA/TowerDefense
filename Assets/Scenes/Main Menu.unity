@@ -304,6 +304,9 @@ MonoBehaviour:
   towerTypes: 01000000
   baseTowers:
   - {fileID: 1853128435}
+  towers:
+  - type: 1
+    tower: {fileID: 1853128435}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

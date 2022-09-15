@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -7,27 +8,29 @@ namespace Towers
 {
     public class TowerFactory : MonoBehaviour
     {
-        [SerializeField] private BaseTower.TowerType[] towerTypes = new BaseTower.TowerType[3];
-        [SerializeField] private GameObject[] baseTowers = new GameObject[3];
+        [Serializable]
+        private struct FactoryEntry
+        {
+            public BaseTower.TowerType type;
+            public GameObject tower;
+        }
+
+        [SerializeField] private FactoryEntry[] towers = new FactoryEntry[3];
 
         public bool CreateTower(BaseTower.TowerType type, out GameObject tower)
         {
-            if (towerTypes.Length != baseTowers.Length)
+            foreach (FactoryEntry entry in towers)
             {
-                Debug.LogError($"The type array and the object array aren't of the same length:\n_towertypes: {towerTypes.Length}, _baseTowers: {baseTowers.Length}", this);
-                tower = default;
-                return false;
+                if (!entry.type.Equals(type) && entry.tower is null)
+                    continue;
+                
+                tower = entry.tower;
+                return true;
             }
-            int index = Array.IndexOf(towerTypes, type);
-            if (index == -1)
-            {
-                Debug.LogError($"TowerType of Type {type} could not be found", this);
-                tower = default;
-                return false;
-            }
-
-            tower = baseTowers[index];
-            return true;
+            
+            Debug.LogError($"TowerType of Type {type} could not be found", this);
+            tower = default;
+            return false;
         }
 
         public bool CreateTower(int type, out GameObject tower)
