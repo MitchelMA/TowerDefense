@@ -31,7 +31,7 @@ namespace Towers
             BaseTower instantiatedTowerBase;
             if (instantiatedTower.TryGetComponent(out instantiatedTowerBase))
             {
-                instantiatedTowerBase.Type = (TowerType) type;
+                instantiatedTowerBase.Type = (BaseTower.TowerType) type;
             }
             
         }

@@ -4,49 +4,50 @@ using UnityEngine;
 
 namespace Towers
 {
-    [Serializable]
-    public enum TowerType
-    {
-        Unset,
-        Fire,
-        Grass,
-        Water,
-    }
+    
     public abstract class BaseTower : MonoBehaviour
     {
-        #region Adjustable Stats
-        
-        [SerializeField] private int baseDamage = 10;
-        [SerializeField] private float baseSpeed = 1f;
-        [SerializeField] private int reachRadius = 5;
-        
+        #region Enums
+
+        [Serializable]
+        public enum TowerType
+        {
+            Unset,
+            Fire,
+            Grass,
+            Water,
+        }
+
         #endregion
         
-        #region Xp Stats
+        #region Structs
         
-        // Xp stats
-        private int currentXp;
-        // Xp needed to lvl up
-        [SerializeField] private int neededXp;
-        // Xp increment to the neededXp after leveling up
-        [SerializeField] private int xpIncOnLvlUp;
+        [Serializable]
+        public struct Stats
+        {
+            public int damage;
+            public int speed;
+            public int radius;
+        }
 
-        protected int lvlPoints = 0;
-        protected int currentLvl = 1;
-        
+        [Serializable]
+        public struct XpStats
+        {
+            public int currentXp;
+            public int neededXp;
+            public int xpIncreaseOnLevelUp;
+            public int lvlPoints;
+            public int currentLvl;
+        }
+
         #endregion
-
-        #region Privates
-
+        
+        public Stats baseStats;
+        public XpStats baseXpStats;
+        
         private TowerType _type = TowerType.Unset;
-        
-        #endregion
 
         #region Public Properties
-        
-        public int BaseDamage => baseDamage;
-        public float BaseSpeed => baseSpeed;
-        public int ReachRadius => reachRadius;
         
         public TowerType Type
         {
@@ -59,12 +60,34 @@ namespace Towers
             }
         }
         
-        public int CurrentXp => currentXp;
-        public int NeededXp => neededXp;
-        public int XpIncOnLvlUp => xpIncOnLvlUp;
-        public int LvlPoints => lvlPoints;
-        public int CurrentLvl => currentLvl;
         #endregion
+
+        #region Currents
+
+        protected Stats CurrentStats;
+        protected XpStats CurrentXpStats;
+
+        #endregion
+
+        public virtual void Start()
+        {
+            CurrentStats = new Stats
+            {
+                damage = baseStats.damage,
+                speed = baseStats.speed,
+                radius = baseStats.radius,
+            };
+
+            CurrentXpStats = new XpStats
+            {
+                currentLvl = baseXpStats.currentLvl,
+                currentXp = baseXpStats.currentXp,
+                lvlPoints = baseXpStats.lvlPoints,
+                neededXp = baseXpStats.neededXp,
+                xpIncreaseOnLevelUp = baseXpStats.xpIncreaseOnLevelUp,
+            };
+            Debug.Log("Stats initialized");
+        }
 
         /// <summary>
         /// Method that automatically gets called after the tower gained a level
@@ -88,7 +111,7 @@ namespace Towers
         /// <returns>The amount of levels the tower went up after gaining the xp</returns>
         public int XpUp(int xp)
         {
-            currentXp += xp;
+            CurrentXpStats.currentXp += xp;
             int gainedLevels = CheckLvlUp();
             
             AfterGainingXp(gainedLevels, xp);
@@ -107,15 +130,15 @@ namespace Towers
         private int CheckLvlUp()
         {
             int lvlups = 0;
-            while (currentXp >= neededXp)
+            while (CurrentXpStats.currentXp >= CurrentXpStats.neededXp)
             {
                 lvlups++;
-                currentXp -= neededXp;
-                neededXp += xpIncOnLvlUp;
+                CurrentXpStats.currentXp -= CurrentXpStats.neededXp;
+                CurrentXpStats.neededXp += CurrentXpStats.xpIncreaseOnLevelUp;
                 
                 // update the current levels
-                currentLvl++;
-                lvlPoints++;
+                CurrentXpStats.currentLvl++;
+                CurrentXpStats.lvlPoints++;
                 // call the lvlup callback
                 AfterLevelUp(lvlups);
             }

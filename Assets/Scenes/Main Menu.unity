@@ -1207,11 +1207,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3edc6171998a463780fceb5a5ba179fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseDamage: 10
-  baseSpeed: 1
-  reachRadius: 5
-  neededXp: 500
-  xpIncOnLvlUp: 10
+  baseStats:
+    damage: 10
+    speed: 5
+    radius: 20
+  baseXpStats:
+    currentXp: 0
+    neededXp: 500
+    xpIncreaseOnLevelUp: 10
+    lvlPoints: 0
+    currentLvl: 0
 --- !u!212 &1853128438
 SpriteRenderer:
   m_ObjectHideFlags: 0

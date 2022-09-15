@@ -7,10 +7,10 @@ namespace Towers
 {
     public class TowerFactory : MonoBehaviour
     {
-        [SerializeField] private TowerType[] _towerTypes = new TowerType[3];
+        [SerializeField] private BaseTower.TowerType[] _towerTypes = new BaseTower.TowerType[3];
         [SerializeField] private GameObject[] _baseTowers = new GameObject[3];
 
-        private bool CreateTower(TowerType type, out GameObject tower)
+        private bool CreateTower(BaseTower.TowerType type, out GameObject tower)
         {
             if (_towerTypes.Length != _baseTowers.Length)
             {
@@ -32,7 +32,7 @@ namespace Towers
 
         public bool CreateTower(int type, out GameObject tower)
         {
-            return CreateTower((TowerType) type, out tower);
+            return CreateTower((BaseTower.TowerType) type, out tower);
         }
     }
 }
