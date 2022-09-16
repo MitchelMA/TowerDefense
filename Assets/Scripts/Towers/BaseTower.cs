@@ -14,8 +14,8 @@ namespace Towers
         {
             Unset,
             Fire,
-            Grass,
-            Water,
+            Poison,
+            Ice,
         }
 
         #endregion
