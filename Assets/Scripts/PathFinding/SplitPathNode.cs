@@ -2,18 +2,20 @@ using UnityEngine;
 
 namespace PathFinding
 {
-    public class SplitPathNode : MonoBehaviour
+    public class SplitPathNode : BasePathNode
     {
-        // Start is called before the first frame update
-        void Start()
+        [SerializeField] private BasePathNode[] paths = new BasePathNode[2];
+        public override void CallBack(PathTraverser traverser)
         {
-        
-        }
+            if (traverser.Backwards)
+            {
+                HandleBackwards(traverser);
+                return;
+            }
 
-        // Update is called once per frame
-        void Update()
-        {
-        
+            BasePathNode nextNode = paths[Random.Range(0, paths.Length)];
+            traverser.PathHistory.Push(this);
+            traverser.TargetNode = nextNode;
         }
     }
 }

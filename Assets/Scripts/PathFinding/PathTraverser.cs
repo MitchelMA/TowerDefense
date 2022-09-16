@@ -11,6 +11,7 @@ namespace PathFinding
         [SerializeField] private float minDistance = 0.4f;
         [SerializeField] private float maxMoveDelta = 4f;
         [SerializeField] private float maxDegreesDelta = 720f;
+        [SerializeField] private float rotationOffset = 0f;
         [SerializeField] private bool backwards;
 
         public Stack<BasePathNode> PathHistory { get; } = new Stack<BasePathNode>();
@@ -44,14 +45,19 @@ namespace PathFinding
 
         private void RotateTowards(Transform from, Transform to, float maxDeltaDegrees)
         {
+            // https://stackoverflow.com/questions/72502263/how-to-rotate-2d-sprite-towards-moving-direction
             Vector3 relativeTargetPos = to.position - from.position;
-            Quaternion targetRotation = Quaternion.LookRotation(relativeTargetPos);
-            from.rotation = Quaternion.RotateTowards(from.rotation, targetRotation, maxDeltaDegrees);
+            
+            float angle = Vector2.SignedAngle(Vector2.right, relativeTargetPos) - rotationOffset;
+            Vector3 targetRotation = new Vector3(0, 0, angle);
+            Quaternion lookTo = Quaternion.Euler(targetRotation);
+
+            from.rotation = Quaternion.RotateTowards(from.rotation, lookTo, maxDeltaDegrees);
         }
 
         private bool CheckArrive(BasePathNode node) =>
             Vector3.Distance(transform.position, node.gameObject.transform.position) <= minDistance;
-
+        
         public void GoBackwards()
         {
             backwards = true;

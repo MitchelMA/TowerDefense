@@ -2,18 +2,12 @@ using UnityEngine;
 
 namespace PathFinding
 {
-    public class EndPathNode : MonoBehaviour
+    public class EndPathNode : BasePathNode
     {
-        // Start is called before the first frame update
-        void Start()
+        public override void CallBack(PathTraverser traverser)
         {
-        
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        
+            traverser.GoBackwards();
+            HandleBackwards(traverser);
         }
     }
 }
