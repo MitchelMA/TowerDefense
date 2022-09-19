@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using UnityEngine;
 
 namespace Monsters
@@ -30,11 +32,16 @@ namespace Monsters
         private int _currentWaveTotalAmount;
         private readonly Stack<BaseMonster.MonsterType> _typeStack = new Stack<BaseMonster.MonsterType>();
         private bool _finishedAllWaves = false;
+        private Mutex _leftMutex = new Mutex();
+        private int _monstersLeft;
+        
 
         public int CurrentWaveTotal => _currentWaveTotalAmount;
         // standard set to false to false so the first wave doesn't automatically start when entered
         private bool _waveBusy = false;
         public bool FinishedAllWaves => _finishedAllWaves;
+        public int MonstersLeft => _monstersLeft;
+        public bool LastWaveFinished => _monstersLeft == 0 && _waveBusy == false;
         
         // Start is called before the first frame update
         private void Start()
@@ -151,7 +158,18 @@ namespace Monsters
         // Method is meant to be called by a button-press in the UI
         public void StartWave()
         {
+            if (!LastWaveFinished)
+                return;
+            _monstersLeft = _typeStack.Count;
             _waveBusy = true;
+        }
+
+        public void DecreaseLeft()
+        {
+            // always in order
+            _leftMutex.WaitOne();
+            _monstersLeft--;
+            _leftMutex.ReleaseMutex();
         }
 
         private void WavesEnd()

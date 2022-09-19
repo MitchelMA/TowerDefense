@@ -21,6 +21,7 @@ namespace Monsters
         #endregion
 
         [SerializeField] protected MonsterType type;
+        [SerializeField] protected WaveController waveController;
 
         public MonsterType Type => type;
 
@@ -44,6 +45,7 @@ namespace Monsters
         protected virtual void OnDestroy()
         {
             Selectable.Deselect();
+            waveController.DecreaseLeft();
         }
     }
 }

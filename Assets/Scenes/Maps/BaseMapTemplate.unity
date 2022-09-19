@@ -566,8 +566,8 @@ GameObject:
   - component: {fileID: 628259380}
   - component: {fileID: 628259383}
   - component: {fileID: 628259382}
-  - component: {fileID: 628259381}
   - component: {fileID: 628259384}
+  - component: {fileID: 628259381}
   m_Layer: 0
   m_Name: EasyMonster
   m_TagString: Untagged
@@ -603,6 +603,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  waveController: {fileID: 1469318490}
 --- !u!114 &628259382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1021,8 +1022,8 @@ GameObject:
   - component: {fileID: 1290367218}
   - component: {fileID: 1290367221}
   - component: {fileID: 1290367220}
-  - component: {fileID: 1290367219}
   - component: {fileID: 1290367222}
+  - component: {fileID: 1290367219}
   m_Layer: 0
   m_Name: HardMonster
   m_TagString: Untagged
@@ -1058,6 +1059,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 2
+  waveController: {fileID: 1469318490}
 --- !u!114 &1290367220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1287,6 +1289,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waves:
+  - easyAmount: 5
+    mediumAmount: 0
+    hardAmount: 0
+    spawnTimeouts: {x: 1, y: 2}
   - easyAmount: 5
     mediumAmount: 0
     hardAmount: 0
@@ -1712,6 +1718,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
+  waveController: {fileID: 1469318490}
 --- !u!114 &1969628828
 MonoBehaviour:
   m_ObjectHideFlags: 0
