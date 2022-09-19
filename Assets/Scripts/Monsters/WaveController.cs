@@ -18,6 +18,7 @@ namespace Monsters
             public int mediumAmount;
             public int hardAmount;
             public Vector2 spawnTimeouts;
+            public float difficultyMultiplier;
         }
 
         #endregion
@@ -65,7 +66,7 @@ namespace Monsters
             if (!GetNextType(out BaseMonster.MonsterType next))
                 return;
 
-            if (!SpawnMonster(next))
+            if (!SpawnMonster(next, waves[_currentWave].difficultyMultiplier))
             {
                 _currentTimeout = 0;
                 Debug.LogError($"Couldn't spawn next monster, Monster was of type {next}", this);
@@ -77,14 +78,14 @@ namespace Monsters
             _currentTimeout = (float)(rnd.NextDouble() * (curWave.spawnTimeouts[1] - curWave.spawnTimeouts[0]) + curWave.spawnTimeouts[0]);
         }
 
-        private bool SpawnMonster(BaseMonster.MonsterType type)
+        private bool SpawnMonster(BaseMonster.MonsterType type, float multiplier)
         {
             if (!factory.CreateMonster(type, out GameObject monster))
                 return false;
 
             SpawnPoint chosenPoint = spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Length)];
             var clone = Instantiate(monster, monstersParent);
-            chosenPoint.SetupMonster(clone);
+            chosenPoint.SetupMonster(clone, multiplier);
             return true;
         }
 

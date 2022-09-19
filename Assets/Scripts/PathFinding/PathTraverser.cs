@@ -23,6 +23,12 @@ namespace PathFinding
             get => targetNode;
             set => targetNode = value;
         }
+        
+        public float Speed
+        {
+            get => maxMoveDelta;
+            set => maxMoveDelta = value;
+        }
 
         // Start is called before the first frame update
         void Start()
