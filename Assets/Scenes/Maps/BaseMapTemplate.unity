@@ -1267,7 +1267,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1469318488}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -12.018657, y: -1.0049111, z: 2.9857278}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1287,10 +1287,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waves:
-  - easyAmount: 10
+  - easyAmount: 5
     mediumAmount: 0
     hardAmount: 0
-    spawnTimeouts: {x: 1, y: 3}
+    spawnTimeouts: {x: 1, y: 2}
   spawnPoints:
   - {fileID: 1588149873}
   factory: {fileID: 1005115768}

@@ -21,7 +21,7 @@ namespace Towers
         {
             foreach (FactoryEntry entry in towers.AsSpan())
             {
-                if (!entry.type.Equals(type) && entry.tower is null)
+                if (!entry.type.Equals(type) || entry.tower is null)
                     continue;
                 
                 tower = entry.tower;

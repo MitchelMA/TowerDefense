@@ -28,14 +28,19 @@ namespace Monsters
         private float _currentTimeout = 0;
         private int _currentWave = 0;
         private int _currentWaveTotalAmount;
-        private Stack<BaseMonster.MonsterType> _typeStack = new Stack<BaseMonster.MonsterType>();
+        private readonly Stack<BaseMonster.MonsterType> _typeStack = new Stack<BaseMonster.MonsterType>();
+        private bool _finishedAllWaves = false;
 
         public int CurrentWaveTotal => _currentWaveTotalAmount;
-        public bool waveBusy = true;
+        // standard set to false to false so the first wave doesn't automatically start when entered
+        private bool _waveBusy = false;
+        public bool FinishedAllWaves => _finishedAllWaves;
         
         // Start is called before the first frame update
         private void Start()
         {
+            // setup the first wave
+            SetupWave(0);
         }
 
         // Update is called once per frame
@@ -46,36 +51,46 @@ namespace Monsters
                 _currentTimeout -= Time.deltaTime;
                 return;
             }
-
-            if (!waveBusy)
+        
+            if (!_waveBusy)
+                return;
+        
+            if (!GetNextType(out BaseMonster.MonsterType next))
                 return;
 
-            BaseMonster.MonsterType next = GetNextType();
-            SpawnMonster(next);
+            if (!SpawnMonster(next))
+            {
+                _currentTimeout = 0;
+                Debug.LogError($"Couldn't spawn next monster, Monster was of type {next}", this);
+                return;
+            }
             
             WaveData curWave = waves[_currentWave];
             System.Random rnd = new System.Random();
             _currentTimeout = (float)(rnd.NextDouble() * (curWave.spawnTimeouts[1] - curWave.spawnTimeouts[0]) + curWave.spawnTimeouts[0]);
         }
 
-        private void SpawnMonster(BaseMonster.MonsterType type)
+        private bool SpawnMonster(BaseMonster.MonsterType type)
         {
-            if (!factory.CreateTower(type, out GameObject monster))
-                return;
+            if (!factory.CreateMonster(type, out GameObject monster))
+                return false;
 
             SpawnPoint chosenPoint = spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Length)];
             var clone = Instantiate(monster, monstersParent);
             chosenPoint.SetupMonster(clone);
+            return true;
         }
 
-        private void SetupWave()
+        private void SetupWave(int wave)
         {
-            WaveData curWave = waves[-_currentWave];
+            Debug.Log($"Setup of wave {wave}");
+            WaveData curWave = waves[wave];
             int curEasyLeft = curWave.easyAmount;
             int curMediumLeft = curWave.mediumAmount;
             int curHardLeft = curWave.hardAmount;
             _currentWaveTotalAmount = curEasyLeft + curMediumLeft + curHardLeft;
 
+            _typeStack.Clear();
             int index = 0;
             while (index < _currentWaveTotalAmount)
             {
@@ -106,14 +121,44 @@ namespace Monsters
                         curHardLeft--;
                         break;
                     }
+                    default:
+                        continue;
                 }
                 _typeStack.Push(chosenType);
+                index++;
             }
         }
 
-        private BaseMonster.MonsterType GetNextType()
+        private bool GetNextType(out BaseMonster.MonsterType type)
         {
-            throw new NotImplementedException();
+            if (_typeStack.TryPop(out type)) return true;
+            
+            // when the stack was empty:
+            // set the wave to not being busy
+            _waveBusy = false;
+            // reset the timeout
+            _currentTimeout = 0;
+            // prepare the next wave
+            if (++_currentWave >= waves.Length)
+            {
+                WavesEnd();
+                return false;
+            }
+            SetupWave(_currentWave);
+            return false;
+        }
+
+        // Method is meant to be called by a button-press in the UI
+        public void StartWave()
+        {
+            _waveBusy = true;
+        }
+
+        private void WavesEnd()
+        {
+            _waveBusy = false;
+            _finishedAllWaves = true;
+            Debug.Log("Finished all waves!!");
         }
     }
 }

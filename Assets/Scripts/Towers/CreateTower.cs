@@ -9,28 +9,18 @@ namespace Towers
     {
 
         [SerializeField]
-        private GameObject factoryGameObj;
+        private TowerFactory towerFactory;
         [SerializeField]
-        private GameObject towerParent;
-
-        private TowerFactory _towerFactory;
-
-        public void Start()
-        {
-            if (!factoryGameObj.TryGetComponent(out _towerFactory))
-            {
-                Debug.LogError($"The Factory Game Object didn't contain a Component of Type {typeof(TowerFactory)}", this);
-            }
-        }
+        private Transform towerParent;
 
         public void InstantiateTower(int type)
         {
-            if (!_towerFactory.CreateTower(type, out GameObject tower))
+            if (!towerFactory.CreateTower(type, out GameObject tower))
             {
                 return;
             }
 
-            Instantiate(tower, towerParent.transform);
+            Instantiate(tower, towerParent);
         }
     }
 }

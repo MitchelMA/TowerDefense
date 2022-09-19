@@ -14,11 +14,11 @@ namespace Monsters
 
         [SerializeField] private FactoryEntry[] monsters = new FactoryEntry[3];
 
-        public bool CreateTower(BaseMonster.MonsterType type, out GameObject monster)
+        public bool CreateMonster(BaseMonster.MonsterType type, out GameObject monster)
         {
             foreach (FactoryEntry entry in monsters.AsSpan())
             {
-                if (!entry.type.Equals(type) && entry.monster is null)
+                if (!entry.type.Equals(type) || entry.monster is null)
                     continue;
 
                 monster = entry.monster;
@@ -30,9 +30,9 @@ namespace Monsters
             return false;
         }
 
-        public bool CreateTower(int type, out GameObject monster)
+        public bool CreateMonster(int type, out GameObject monster)
         {
-            return CreateTower((BaseMonster.MonsterType) type, out monster);
+            return CreateMonster((BaseMonster.MonsterType) type, out monster);
         }
     }
 }
