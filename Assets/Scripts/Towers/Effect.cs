@@ -46,7 +46,8 @@ namespace Towers
 
         public void WearOn(BaseMonster monster)
         {
-            monster.GiveEffect(this);
+            if (!monster.GiveEffect(this))
+                return;
             // get the sprite of the monster
             if (monster.TryGetComponent(out SpriteRenderer spriteRenderer))
             {

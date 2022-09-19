@@ -92,16 +92,17 @@ namespace Monsters
             waveController.DecreaseLeft();
         }
 
-        public void GiveEffect(Effect effect)
+        public bool GiveEffect(Effect effect)
         {
             foreach (Effect lEffect in _effects)
             {
                 if (lEffect.Type == effect.Type)
-                    return;
+                    return false;
             }
             
             // it was not in the list of effects as to not add multiple of one type
             _effects.Add(effect);
+            return true;
         }
 
         public void GainDamage(int amount)
