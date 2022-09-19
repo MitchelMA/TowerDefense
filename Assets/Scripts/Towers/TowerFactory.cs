@@ -19,7 +19,7 @@ namespace Towers
 
         public bool CreateTower(BaseTower.TowerType type, out GameObject tower)
         {
-            foreach (FactoryEntry entry in towers)
+            foreach (FactoryEntry entry in towers.AsSpan())
             {
                 if (!entry.type.Equals(type) && entry.tower is null)
                     continue;

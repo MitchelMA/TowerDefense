@@ -26,7 +26,7 @@ namespace Towers
         public struct Stats
         {
             public int damage;
-            public int speed;
+            public int fireRate;
             public int radius;
         }
 
@@ -79,7 +79,7 @@ namespace Towers
             CurrentStats = new Stats
             {
                 damage = baseStats.damage,
-                speed = baseStats.speed,
+                fireRate = baseStats.fireRate,
                 radius = baseStats.radius,
             };
 
