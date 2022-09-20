@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Towers
 {
-    
+    [RequireComponent(typeof(CircleCollider2D))]
     public abstract class BaseTower : MonoBehaviour
     {
         #region Enums
@@ -46,6 +46,7 @@ namespace Towers
         public XpStats baseXpStats;
         
         private TowerType _type = TowerType.Unset;
+        protected CircleCollider2D _collider;
 
         #region Public Properties
         
@@ -91,6 +92,7 @@ namespace Towers
                 neededXp = baseXpStats.neededXp,
                 xpIncreaseOnLevelUp = baseXpStats.xpIncreaseOnLevelUp,
             };
+            _collider = GetComponent<CircleCollider2D>();
             Debug.Log("Stats initialized");
         }
 

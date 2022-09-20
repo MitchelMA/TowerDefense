@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Monsters
 {
@@ -21,18 +22,27 @@ namespace Monsters
             public float difficultyMultiplier;
         }
 
+        [Serializable]
+        private struct UIElements
+        {
+            public Button nextBtn;
+            public Text waveCountText;
+            public Text enemyLeftText;
+        }
+        
         #endregion
 
         [SerializeField] private WaveData[] waves = new WaveData[1];
         [SerializeField] private SpawnPoint[] spawnPoints = new SpawnPoint[1];
         [SerializeField] private MonsterFactory factory;
         [SerializeField] private Transform monstersParent;
+        [SerializeField] private UIElements ui;
 
         private float _currentTimeout = 0;
         private int _currentWave = 0;
         private int _currentWaveTotalAmount;
         private readonly Stack<BaseMonster.MonsterType> _typeStack = new Stack<BaseMonster.MonsterType>();
-        private bool _finishedAllWaves = false;
+        private bool _allWavesSpawned = false;
         private Mutex _leftMutex = new Mutex();
         private int _monstersLeft;
         
@@ -40,15 +50,16 @@ namespace Monsters
         public int CurrentWaveTotal => _currentWaveTotalAmount;
         // standard set to false to false so the first wave doesn't automatically start when entered
         private bool _waveBusy = false;
-        public bool FinishedAllWaves => _finishedAllWaves;
+        public bool AllWavesSpawned => _allWavesSpawned;
         public int MonstersLeft => _monstersLeft;
-        public bool LastWaveFinished => _monstersLeft == 0 && _waveBusy == false;
+        public bool PreviousWaveFinished => _monstersLeft <= 0;
         
         // Start is called before the first frame update
         private void Start()
         {
             // setup the first wave
             SetupWave(0);
+            UpdateWaveCounter();
         }
 
         // Update is called once per frame
@@ -91,7 +102,6 @@ namespace Monsters
 
         private void SetupWave(int wave)
         {
-            Debug.Log($"Setup of wave {wave}");
             WaveData curWave = waves[wave];
             int curEasyLeft = curWave.easyAmount;
             int curMediumLeft = curWave.mediumAmount;
@@ -140,8 +150,25 @@ namespace Monsters
         private bool GetNextType(out BaseMonster.MonsterType type)
         {
             if (_typeStack.TryPop(out type)) return true;
-            
-            // when the stack was empty:
+            return false;
+        }
+
+        // Method is meant to be called by a button-press in the UI
+        public void StartWave()
+        {
+            if (!PreviousWaveFinished)
+                return;
+            _monstersLeft = _typeStack.Count;
+            _waveBusy = true;
+            ui.nextBtn.interactable = false;
+            UpdateWaveCounter();
+            UpdateEnemyLeftCounter();
+        }
+
+        private void StopWave()
+        {
+            if (!PreviousWaveFinished)
+                return;
             // set the wave to not being busy
             _waveBusy = false;
             // reset the timeout
@@ -149,20 +176,8 @@ namespace Monsters
             // prepare the next wave
             if (++_currentWave >= waves.Length)
             {
-                WavesEnd();
-                return false;
+                SpawnedAllWaves();
             }
-            SetupWave(_currentWave);
-            return false;
-        }
-
-        // Method is meant to be called by a button-press in the UI
-        public void StartWave()
-        {
-            if (!LastWaveFinished)
-                return;
-            _monstersLeft = _typeStack.Count;
-            _waveBusy = true;
         }
 
         public void DecreaseLeft()
@@ -171,13 +186,41 @@ namespace Monsters
             _leftMutex.WaitOne();
             _monstersLeft--;
             _leftMutex.ReleaseMutex();
+            UpdateEnemyLeftCounter();
+
+            if (PreviousWaveFinished)
+            {
+                StopWave();
+                if (_allWavesSpawned)
+                {
+                    FinishedAllWaves();
+                    return;
+                }
+                SetupWave(_currentWave);
+                ui.nextBtn.interactable = true;
+            }
+            
         }
 
-        private void WavesEnd()
+        private void SpawnedAllWaves()
         {
             _waveBusy = false;
-            _finishedAllWaves = true;
-            Debug.Log("Finished all waves!!");
+            _allWavesSpawned = true;
+        }
+
+        private void FinishedAllWaves()
+        {
+            Debug.Log("Finished all waves!");
+        }
+
+        private void UpdateWaveCounter()
+        {
+            ui.waveCountText.text = $"Wave {(_currentWave+1):D2}";
+        }
+
+        private void UpdateEnemyLeftCounter()
+        {
+            ui.enemyLeftText.text = $"{_monstersLeft} / {_currentWaveTotalAmount}";
         }
     }
 }

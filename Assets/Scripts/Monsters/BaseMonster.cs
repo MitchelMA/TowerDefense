@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Currency;
 using MouseControl;
 using PathFinding;
 using Towers;
@@ -35,6 +36,7 @@ namespace Monsters
 
         [SerializeField] protected MonsterType type;
         [SerializeField] protected WaveController waveController;
+        [SerializeField] protected CurrencyController currencyController;
         public Stats baseStats;
 
         public MonsterType Type => type;
@@ -44,6 +46,8 @@ namespace Monsters
 
         protected readonly List<Effect> _effects = new List<Effect>();
         protected Stats currentStats;
+
+        protected bool wasKilled = false;
     
         // Start is called before the first frame update
         protected virtual void Start()
@@ -90,6 +94,12 @@ namespace Monsters
         {
             Selectable.Deselect();
             waveController.DecreaseLeft();
+            // calculate its value only when it was killed
+            if (wasKilled)
+            {
+                int value = (int)(baseStats.hp / 10 + baseStats.speed);
+                currencyController.Add(value);
+            }
         }
 
         public bool GiveEffect(Effect effect)
@@ -108,8 +118,11 @@ namespace Monsters
         public void GainDamage(int amount)
         {
             currentStats.hp -= amount;
-            if(currentStats.hp <= 0)
+            if (currentStats.hp <= 0)
+            {
+                wasKilled = true;
                 Destroy(gameObject);
+            }
         }
 
         public float GetSpeed() => PathTraverser.Speed;

@@ -36,7 +36,8 @@ namespace MouseControl
         public override void Deselect()
         {
             Debug.Log("EnemySelectable was Deselected");
-            enemyUi.SetActive(false);
+            if(enemyUi)
+                enemyUi.SetActive(false);
             _selected = false;
         }
     }
