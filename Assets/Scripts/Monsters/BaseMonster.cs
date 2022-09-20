@@ -43,6 +43,7 @@ namespace Monsters
 
         protected PathTraverser PathTraverser;
         protected EnemySelectable Selectable;
+        protected CircleCollider2D collider;
 
         protected readonly List<Effect> _effects = new List<Effect>();
         protected Stats currentStats;
@@ -57,6 +58,7 @@ namespace Monsters
             
             SetSpeed(baseStats.speed);
             currentStats.hp = currentStats.hp;
+            collider = GetComponent<CircleCollider2D>();
         }
 
         // Update is called once per frame

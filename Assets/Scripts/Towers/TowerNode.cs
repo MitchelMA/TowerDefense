@@ -33,7 +33,7 @@ namespace Towers
             Debug.Log("PlaceTower was called");
             if (HasTower)
             {
-                Destroy(_currentTower);
+                // Destroy(_currentTower);
                 return;
             }
             

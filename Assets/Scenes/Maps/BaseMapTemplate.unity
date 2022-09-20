@@ -1915,7 +1915,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1857909128862629170, guid: 6459701d3016fd042bfed380b45596ba, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -3.16
       objectReference: {fileID: 0}
     - target: {fileID: 1857909128862629170, guid: 6459701d3016fd042bfed380b45596ba, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2366,7 +2366,7 @@ MonoBehaviour:
   baseStats:
     damage: 10
     fireRate: 1
-    radius: 10
+    radius: 2
   baseXpStats:
     currentXp: 0
     neededXp: 500

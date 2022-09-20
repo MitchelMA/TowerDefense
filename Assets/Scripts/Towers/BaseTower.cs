@@ -1,5 +1,4 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Towers
@@ -27,7 +26,7 @@ namespace Towers
         {
             public int damage;
             public int fireRate;
-            public int radius;
+            public float radius;
         }
 
         [Serializable]
@@ -46,7 +45,7 @@ namespace Towers
         public XpStats baseXpStats;
         
         private TowerType _type = TowerType.Unset;
-        protected CircleCollider2D _collider;
+        protected CircleCollider2D Collider;
 
         #region Public Properties
         
@@ -92,7 +91,8 @@ namespace Towers
                 neededXp = baseXpStats.neededXp,
                 xpIncreaseOnLevelUp = baseXpStats.xpIncreaseOnLevelUp,
             };
-            _collider = GetComponent<CircleCollider2D>();
+            Collider = GetComponent<CircleCollider2D>();
+            SetRadius(baseStats.radius);
             Debug.Log("Stats initialized");
         }
 
@@ -155,6 +155,12 @@ namespace Towers
         protected void ResetTowerType()
         {
             _type = TowerType.Unset;
+        }
+
+        protected void SetRadius(float newRadius)
+        {
+            CurrentStats.radius = newRadius;
+            Collider.radius = newRadius;
         }
     }
 }

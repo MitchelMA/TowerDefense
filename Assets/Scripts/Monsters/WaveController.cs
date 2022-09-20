@@ -215,12 +215,14 @@ namespace Monsters
 
         private void UpdateWaveCounter()
         {
-            ui.waveCountText.text = $"Wave {(_currentWave+1):D2}";
+            if(ui.waveCountText)
+                ui.waveCountText.text = $"Wave {(_currentWave+1):D2}";
         }
 
         private void UpdateEnemyLeftCounter()
         {
-            ui.enemyLeftText.text = $"{_monstersLeft} / {_currentWaveTotalAmount}";
+            if(ui.enemyLeftText)
+                ui.enemyLeftText.text = $"{_monstersLeft} / {_currentWaveTotalAmount}";
         }
     }
 }
