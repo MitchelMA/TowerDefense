@@ -1,7 +1,7 @@
 using Monsters;
 using UnityEngine;
 
-namespace Towers
+namespace Towers.Projectile
 {
     public class Effect
     {
@@ -11,20 +11,20 @@ namespace Towers
 
         public float Duration { get; private set; }
 
-        private Color ColorIncrease { get; }
+        private Color TargetColour { get; }
 
         public BaseTower.TowerType Type { get; }
 
         public float CurrentTimeout { get; private set; }
 
 
-        public Effect(int damage, float interval, float duration, Color colorIncrease, BaseTower.TowerType type)
+        public Effect(int damage, float interval, float duration, Color targetColour, BaseTower.TowerType type)
         {
             Damage = damage;
             Interval = interval;
             CurrentTimeout = interval;
             Duration = duration;
-            ColorIncrease = colorIncrease;
+            TargetColour = targetColour;
             Type = type;
         }
 
@@ -51,7 +51,7 @@ namespace Towers
             // get the sprite of the monster
             if (monster.TryGetComponent(out SpriteRenderer spriteRenderer))
             {
-                spriteRenderer.color += ColorIncrease;
+                spriteRenderer.color -= Color.white - TargetColour;
             }
         }
 
@@ -59,7 +59,7 @@ namespace Towers
         {
             if (monster.TryGetComponent(out SpriteRenderer spriteRenderer))
             {
-                spriteRenderer.color -= ColorIncrease;
+                spriteRenderer.color += Color.white - TargetColour;
             }
         }
     }

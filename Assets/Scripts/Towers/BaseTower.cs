@@ -26,7 +26,9 @@ namespace Towers
         {
             public int damage;
             public int fireRate;
+            public float projectileSpeed;
             public float radius;
+            public Color effectColor;
         }
 
         [Serializable]
@@ -46,6 +48,9 @@ namespace Towers
         
         private TowerType _type = TowerType.Unset;
         protected CircleCollider2D Collider;
+        [SerializeField] protected GameObject projectilePrefab;
+        [SerializeField] protected Transform projectileParent;
+        [SerializeField] protected string enemyTag;
 
         #region Public Properties
         
@@ -80,7 +85,9 @@ namespace Towers
             {
                 damage = baseStats.damage,
                 fireRate = baseStats.fireRate,
+                projectileSpeed = baseStats.projectileSpeed,
                 radius = baseStats.radius,
+                effectColor = baseStats.effectColor,
             };
 
             CurrentXpStats = new XpStats
@@ -94,6 +101,18 @@ namespace Towers
             Collider = GetComponent<CircleCollider2D>();
             SetRadius(baseStats.radius);
             Debug.Log("Stats initialized");
+        }
+
+        protected void OnTriggerStay(Collider other)
+        {
+            if (!other.tag.Equals(enemyTag))
+                return;
+            // Code that has to do with firing at the enemy:
+            // calculating the aim-direction
+            
+            // spawning in the projectile:
+            
+            // setup of the projectile with the Effect and other data:
         }
 
         /// <summary>
