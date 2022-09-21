@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using Monsters;
+using Towers.Projectile;
 using UnityEngine;
 
 namespace Towers
@@ -25,10 +28,9 @@ namespace Towers
         public struct Stats
         {
             public int damage;
-            public int fireRate;
+            public float fireRate;
             public float projectileSpeed;
             public float radius;
-            public Color effectColor;
         }
 
         [Serializable]
@@ -41,16 +43,27 @@ namespace Towers
             public int currentLvl;
         }
 
+        [Serializable]
+        public struct EffectStats
+        {
+            public int damage;
+            public float interval;
+            public float duration;
+            public Color effectColour;
+        }
+
         #endregion
         
         public Stats baseStats;
         public XpStats baseXpStats;
+        public EffectStats baseEffectStats;
         
         private TowerType _type = TowerType.Unset;
         protected CircleCollider2D Collider;
-        [SerializeField] protected GameObject projectilePrefab;
+        [SerializeField] protected Projectile.Projectile projectilePrefab;
         [SerializeField] protected Transform projectileParent;
         [SerializeField] protected string enemyTag;
+        [SerializeField] protected int integralSteps = 10;
 
         #region Public Properties
         
@@ -71,6 +84,8 @@ namespace Towers
 
         protected Stats CurrentStats;
         protected XpStats CurrentXpStats;
+        protected EffectStats CurrentEffectStats;
+        protected float currentShootTimeout;
 
         #endregion
 
@@ -87,7 +102,6 @@ namespace Towers
                 fireRate = baseStats.fireRate,
                 projectileSpeed = baseStats.projectileSpeed,
                 radius = baseStats.radius,
-                effectColor = baseStats.effectColor,
             };
 
             CurrentXpStats = new XpStats
@@ -98,21 +112,37 @@ namespace Towers
                 neededXp = baseXpStats.neededXp,
                 xpIncreaseOnLevelUp = baseXpStats.xpIncreaseOnLevelUp,
             };
+
+            CurrentEffectStats = new EffectStats
+            {
+                damage = baseEffectStats.damage,
+                duration = baseEffectStats.duration,
+                effectColour = baseEffectStats.effectColour,
+                interval = baseEffectStats.interval,
+            };
+            
             Collider = GetComponent<CircleCollider2D>();
             SetRadius(baseStats.radius);
+            currentShootTimeout = 0;
             Debug.Log("Stats initialized");
         }
 
-        protected void OnTriggerStay(Collider other)
+        protected virtual void Update()
+        {
+            if (currentShootTimeout >= 0)
+                currentShootTimeout -= Time.deltaTime;
+        }
+
+        protected void OnTriggerStay2D(Collider2D other)
         {
             if (!other.tag.Equals(enemyTag))
                 return;
+
             // Code that has to do with firing at the enemy:
-            // calculating the aim-direction
+            if (!other.TryGetComponent(out BaseMonster monster))
+                return;
             
-            // spawning in the projectile:
-            
-            // setup of the projectile with the Effect and other data:
+            ShootAt(monster);
         }
 
         /// <summary>
@@ -127,6 +157,70 @@ namespace Towers
         /// <param name="levelsGained">The amount of levels the tower gained</param>
         /// <param name="xpGained">The amount of xp the tower gained</param>
         protected virtual void AfterGainingXp(int levelsGained, int xpGained) { }
+
+        protected virtual bool ShootAt(BaseMonster monster)
+        {
+            if (currentShootTimeout >= 0)
+                return false;
+
+            // calculating the aim-direction
+            Vector3 monDir = monster.UDir;
+            Vector3 monPos = monster.transform.position;
+            float monSpeed = monster.Speed;
+            float dist = (monPos - transform.position).magnitude;
+            float dur = dist / CurrentStats.projectileSpeed;
+
+            Vector3 max = monPos + monDir * monSpeed * dur;
+            float timeDiff = CalcTimeDiff(monster, max);
+            // almost impossible to hit monster
+            // if (timeDiff > 0.17)
+            //     return false;
+
+            Vector3 min = monPos + monDir * monSpeed * (dur + timeDiff);
+            Vector3 middle = Vector3.Lerp(min, max, 0.5f);
+            for (int i = 0; i < integralSteps; i++)
+            {
+                float diff = Math.Abs(CalcTimeDiff(monster, middle) - timeDiff);
+                if (diff < 0.0001)
+                    break;
+
+                timeDiff = CalcTimeDiff(monster, middle);
+                // overshot
+                if (timeDiff < 0)
+                {
+                    max = middle;
+                    middle = Vector3.Lerp(min, max, 0.5f);
+                }
+                // undershot
+                else
+                {
+                    min = middle;
+                    middle = Vector3.Lerp(min, max, 0.5f);
+                }
+            }
+
+            
+            Vector3 predictionDir = (middle - transform.position).normalized;
+            
+            // setup of the projectile with the Effect and other data:
+            Effect effect = new Effect(
+                CurrentEffectStats.damage,
+                CurrentEffectStats.interval,
+                CurrentEffectStats.duration,
+                CurrentEffectStats.effectColour,
+                _type);
+            var clone = Instantiate(projectilePrefab, projectileParent);
+            clone.transform.position = transform.position;
+            clone.Setup(predictionDir, CurrentStats.projectileSpeed, CurrentStats.damage, effect, this);
+
+            // reset the timeout
+            currentShootTimeout = 1 / CurrentStats.fireRate;
+            return true;
+
+            float CalcTimeDiff(BaseMonster mon, Vector3 bestPrediction) =>
+                Vector3.Distance(transform.position, bestPrediction) / CurrentStats.projectileSpeed -
+                Vector3.Distance(mon.transform.position, bestPrediction) / mon.Speed;
+        }
 
 
         /// <summary>

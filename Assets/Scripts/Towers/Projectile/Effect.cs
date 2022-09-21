@@ -30,7 +30,8 @@ namespace Towers.Projectile
 
         public void ApplyEffect(BaseMonster monster)
         {
-            monster.GainDamage(Damage);
+            // from is set to null to indicate that this is from an effect
+            monster.GainDamage(Damage, null);
         }
 
         public void DecreaseTimeout(float amount)

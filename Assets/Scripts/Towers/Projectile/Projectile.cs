@@ -12,9 +12,10 @@ namespace Towers.Projectile
         public float Speed { get; private set; }
         public int Damage { get; private set; }
         public Effect Effect { get; private set; }
+        public BaseTower Owner { get; private set; }
 
         // life-time in seconds;
-        private float _lifeTime = 10;
+        private float _lifeTime = 5;
         
         // Start is called before the first frame update
         private void Start()
@@ -30,12 +31,11 @@ namespace Towers.Projectile
                 Destroy(gameObject);
                 return;
             }
-            
             transform.Translate(UDir * Speed * Time.deltaTime);
             _lifeTime -= Time.deltaTime;
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void OnTriggerEnter2D(Collider2D other)
         {
             // if it hit a monster, even though the life-time went below zero
             if (_lifeTime <= 0)
@@ -47,17 +47,18 @@ namespace Towers.Projectile
             if (!other.TryGetComponent(out BaseMonster monster))
                 return;
             
-            monster.GainDamage(Damage);
+            monster.GainDamage(Damage, Owner);
             Effect.WearOn(monster);
             Destroy(gameObject);
         }
 
-        public void Setup(Vector3 uDir, float speed, int damage, Effect effect)
+        public void Setup(Vector3 uDir, float speed, int damage, Effect effect, BaseTower owner)
         {
             UDir = uDir.normalized;
             Speed = speed;
             Damage = damage;
             Effect = effect;
+            Owner = owner;
         }
     }
 }

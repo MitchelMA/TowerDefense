@@ -46,10 +46,16 @@ namespace Monsters
         protected EnemySelectable Selectable;
         protected CircleCollider2D collider;
 
-        protected readonly List<Effect> _effects = new List<Effect>();
-        protected Stats currentStats;
+        protected readonly List<Effect> Effects = new List<Effect>();
+        protected Stats CurrentStats;
 
-        protected bool wasKilled = false;
+        protected bool WasKilled = false;
+        protected readonly List<BaseTower> HitBy = new List<BaseTower>();
+
+        private Vector3 _lastpos;
+        private Vector3 _curpos;
+        public Vector3 UDir => (_curpos - _lastpos).normalized;
+        public float Speed => PathTraverser.Speed;
     
         // Start is called before the first frame update
         protected virtual void Start()
@@ -58,15 +64,20 @@ namespace Monsters
             Selectable = GetComponent<EnemySelectable>();
             
             SetSpeed(baseStats.speed);
-            currentStats.hp = currentStats.hp;
+            CurrentStats.hp = baseStats.hp;
             collider = GetComponent<CircleCollider2D>();
+            _curpos = transform.position;
         }
 
         // Update is called once per frame
         protected virtual void Update()
         {
+            // calculating the moving direction
+            _lastpos = _curpos;
+            _curpos = transform.position;
+            
             List<Effect> woreOff = new List<Effect>();
-            foreach (Effect effect in _effects)
+            foreach (Effect effect in Effects)
             {
                 if (effect.CurrentTimeout > 0)
                 {
@@ -89,7 +100,7 @@ namespace Monsters
             foreach (Effect wornOff in woreOff)
             {
                 wornOff.WearOf(this);
-                _effects.Remove(wornOff);
+                Effects.Remove(wornOff);
             }
         }
 
@@ -98,42 +109,54 @@ namespace Monsters
             Selectable.Deselect();
             waveController.DecreaseLeft();
             // calculate its value only when it was killed
-            if (wasKilled)
+            if (WasKilled)
             {
                 int value = (int)(baseStats.hp / 10 + baseStats.speed);
                 currencyController.Add(value);
+                foreach (BaseTower hit in HitBy)
+                    hit.XpUp(value);
             }
         }
 
         public bool GiveEffect(Effect effect)
         {
-            foreach (Effect lEffect in _effects)
+            foreach (Effect lEffect in Effects)
             {
                 if (lEffect.Type == effect.Type)
                     return false;
             }
             
             // it was not in the list of effects as to not add multiple of one type
-            _effects.Add(effect);
+            Effects.Add(effect);
             return true;
         }
 
-        public void GainDamage(int amount)
+        public void GainDamage(int amount, BaseTower from)
         {
-            currentStats.hp -= amount;
-            if (currentStats.hp <= 0)
+            CurrentStats.hp -= amount;
+            // null is allowed to make the damageGiver anonymous
+            if(from is not null)
+                AddHitBy(from);
+            if (CurrentStats.hp <= 0)
             {
-                wasKilled = true;
+                WasKilled = true;
                 Destroy(gameObject);
             }
         }
-
-        public float GetSpeed() => PathTraverser.Speed;
-
+        
         public void SetSpeed(float value)
         {
-            currentStats.speed = value;
+            CurrentStats.speed = value;
             PathTraverser.Speed = value;
+        }
+
+        private bool AddHitBy(BaseTower tower)
+        {
+            if (HitBy.Contains(tower))
+                return false;
+            
+            HitBy.Add(tower);
+            return true;
         }
     }
 }
