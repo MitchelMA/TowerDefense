@@ -34,7 +34,6 @@ namespace Towers.Fire
             
             // Set the corresponding type
             Type = TowerType.Fire;
-            effectType = typeof(FireEffect);
             
             Debug.Log($"Type: {Type}");
         }

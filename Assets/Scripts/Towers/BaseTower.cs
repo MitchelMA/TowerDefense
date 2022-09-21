@@ -56,8 +56,6 @@ namespace Towers
         private TowerType _type = TowerType.Unset;
         protected CircleCollider2D Collider;
 
-        protected Type effectType;
-
         #region Public Properties
         
         public TowerType Type
@@ -140,6 +138,12 @@ namespace Towers
         /// <param name="levelsGained">The amount of levels the tower gained</param>
         /// <param name="xpGained">The amount of xp the tower gained</param>
         protected virtual void AfterGainingXp(int levelsGained, int xpGained) { }
+
+        protected virtual bool CreateEffect(out BaseEffect effect)
+        {
+            effect = default;
+            return false;
+        }
 
         protected virtual bool ShootAt(BaseMonster monster)
         {
@@ -255,6 +259,6 @@ namespace Towers
             Collider.radius = newRadius;
         }
 
-        protected abstract bool CreateEffect(out BaseEffect effect);
+        
     }
 }

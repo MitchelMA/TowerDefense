@@ -15,23 +15,7 @@ namespace Towers.Fire
 
         protected override bool CreateEffect(out BaseEffect effect)
         {
-            if (effectType is null)
-            {
-                effect = default;
-                return false;
-            }
-            Type[] constructorTypes = {
-                typeof(EffectStats),
-                typeof(TowerType),
-            };
-            ConstructorInfo constructorInfo = effectType.GetConstructor(constructorTypes);
-            if (constructorInfo is null)
-            {
-                effect = default;
-                return false;
-            }
-
-            effect = (FireEffect) constructorInfo.Invoke(new object[] {_currentEffectStats, Type});
+            effect = new FireEffect(_currentEffectStats, Type);
             return true;
         }
 

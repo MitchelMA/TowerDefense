@@ -496,7 +496,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -619,7 +619,7 @@ RectTransform:
   m_Children:
   - {fileID: 918385607}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -926,7 +926,7 @@ RectTransform:
   - {fileID: 816765211}
   - {fileID: 1107659933}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1360,10 +1360,10 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 0.3160377, b: 0.3160377, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_HighlightedColor: {r: 0.7924528, g: 0.1981132, b: 0.1981132, a: 1}
+    m_PressedColor: {r: 0.6320754, g: 0.10435206, b: 0.10435206, a: 1}
+    m_SelectedColor: {r: 0.79215693, g: 0.20000002, b: 0.20000002, a: 1}
+    m_DisabledColor: {r: 0.3584906, g: 0.079476684, b: 0.079476684, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -4201,6 +4201,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3edc6171998a463780fceb5a5ba179fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: -7449802901290990392, guid: 5995084551996594a9dbd93f75a82ca5, type: 3}
+  projectileParent: {fileID: 1449503362}
+  enemyTag: Enemy
+  integralSteps: 10
   baseStats:
     damage: 10
     fireRate: 2
@@ -4212,10 +4216,6 @@ MonoBehaviour:
     xpIncreaseOnLevelUp: 10
     lvlPoints: 0
     currentLvl: 1
-  projectilePrefab: {fileID: -7449802901290990392, guid: 5995084551996594a9dbd93f75a82ca5, type: 3}
-  projectileParent: {fileID: 1449503362}
-  enemyTag: Enemy
-  integralSteps: 10
   baseEffectStats:
     damage: 1
     interval: 0.5

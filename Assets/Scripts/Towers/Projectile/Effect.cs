@@ -18,10 +18,6 @@ namespace Towers.Projectile
         public float CurrentTimeout { get; protected set; }
 
         public abstract void ApplyEffect(BaseMonster monster);
-        // {
-        //     // from is set to null to indicate that this is from an effect
-        //     monster.GainDamage(Damage, null);
-        // }
 
         public void DecreaseTimeout(float amount)
         {
