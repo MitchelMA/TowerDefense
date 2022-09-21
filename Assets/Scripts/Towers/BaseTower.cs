@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Monsters;
 using Towers.Projectile;
 using UnityEngine;
@@ -43,27 +44,19 @@ namespace Towers
             public int currentLvl;
         }
 
-        [Serializable]
-        public struct EffectStats
-        {
-            public int damage;
-            public float interval;
-            public float duration;
-            public Color effectColour;
-        }
-
         #endregion
         
-        public Stats baseStats;
-        public XpStats baseXpStats;
-        public EffectStats baseEffectStats;
-        
-        private TowerType _type = TowerType.Unset;
-        protected CircleCollider2D Collider;
         [SerializeField] protected Projectile.Projectile projectilePrefab;
         [SerializeField] protected Transform projectileParent;
         [SerializeField] protected string enemyTag;
         [SerializeField] protected int integralSteps = 10;
+        public Stats baseStats;
+        public XpStats baseXpStats;
+        
+        private TowerType _type = TowerType.Unset;
+        protected CircleCollider2D Collider;
+
+        protected Type effectType;
 
         #region Public Properties
         
@@ -84,7 +77,6 @@ namespace Towers
 
         protected Stats CurrentStats;
         protected XpStats CurrentXpStats;
-        protected EffectStats CurrentEffectStats;
         protected float currentShootTimeout;
 
         #endregion
@@ -113,18 +105,9 @@ namespace Towers
                 xpIncreaseOnLevelUp = baseXpStats.xpIncreaseOnLevelUp,
             };
 
-            CurrentEffectStats = new EffectStats
-            {
-                damage = baseEffectStats.damage,
-                duration = baseEffectStats.duration,
-                effectColour = baseEffectStats.effectColour,
-                interval = baseEffectStats.interval,
-            };
-            
             Collider = GetComponent<CircleCollider2D>();
             SetRadius(baseStats.radius);
             currentShootTimeout = 0;
-            Debug.Log("Stats initialized");
         }
 
         protected virtual void Update()
@@ -203,12 +186,8 @@ namespace Towers
             Vector3 predictionDir = (middle - transform.position).normalized;
             
             // setup of the projectile with the Effect and other data:
-            Effect effect = new Effect(
-                CurrentEffectStats.damage,
-                CurrentEffectStats.interval,
-                CurrentEffectStats.duration,
-                CurrentEffectStats.effectColour,
-                _type);
+            bool hadEffect = CreateEffect(out BaseEffect effect);
+            
             var clone = Instantiate(projectilePrefab, projectileParent);
             clone.transform.position = transform.position;
             clone.Setup(predictionDir, CurrentStats.projectileSpeed, CurrentStats.damage, effect, this);
@@ -275,5 +254,7 @@ namespace Towers
             CurrentStats.radius = newRadius;
             Collider.radius = newRadius;
         }
+
+        protected abstract bool CreateEffect(out BaseEffect effect);
     }
 }

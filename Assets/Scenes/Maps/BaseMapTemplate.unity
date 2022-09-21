@@ -4203,7 +4203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseStats:
     damage: 10
-    fireRate: 1
+    fireRate: 2
     projectileSpeed: 5
     radius: 5
   baseXpStats:
@@ -4212,15 +4212,15 @@ MonoBehaviour:
     xpIncreaseOnLevelUp: 10
     lvlPoints: 0
     currentLvl: 1
+  projectilePrefab: {fileID: -7449802901290990392, guid: 5995084551996594a9dbd93f75a82ca5, type: 3}
+  projectileParent: {fileID: 1449503362}
+  enemyTag: Enemy
+  integralSteps: 10
   baseEffectStats:
     damage: 1
     interval: 0.5
     duration: 5
     effectColour: {r: 0.990566, g: 0.5963052, b: 0.18222679, a: 1}
-  projectilePrefab: {fileID: -7449802901290990392, guid: 5995084551996594a9dbd93f75a82ca5, type: 3}
-  projectileParent: {fileID: 1449503362}
-  enemyTag: Enemy
-  integralSteps: 50
 --- !u!212 &1894701645
 SpriteRenderer:
   m_ObjectHideFlags: 0

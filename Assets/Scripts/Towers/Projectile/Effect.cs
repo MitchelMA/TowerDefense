@@ -3,36 +3,25 @@ using UnityEngine;
 
 namespace Towers.Projectile
 {
-    public class Effect
+    public abstract class BaseEffect
     {
-        private int Damage { get; }
+        public int Value { get; protected set; }
 
-        private float Interval { get; }
+        public float Interval { get; protected set; }
 
-        public float Duration { get; private set; }
+        public float Duration { get; protected set; }
 
-        private Color TargetColour { get; }
+        public Color TargetColour { get; protected set; }
 
-        public BaseTower.TowerType Type { get; }
+        public BaseTower.TowerType Type { get; protected set; }
 
-        public float CurrentTimeout { get; private set; }
+        public float CurrentTimeout { get; protected set; }
 
-
-        public Effect(int damage, float interval, float duration, Color targetColour, BaseTower.TowerType type)
-        {
-            Damage = damage;
-            Interval = interval;
-            CurrentTimeout = interval;
-            Duration = duration;
-            TargetColour = targetColour;
-            Type = type;
-        }
-
-        public void ApplyEffect(BaseMonster monster)
-        {
-            // from is set to null to indicate that this is from an effect
-            monster.GainDamage(Damage, null);
-        }
+        public abstract void ApplyEffect(BaseMonster monster);
+        // {
+        //     // from is set to null to indicate that this is from an effect
+        //     monster.GainDamage(Damage, null);
+        // }
 
         public void DecreaseTimeout(float amount)
         {
@@ -45,7 +34,7 @@ namespace Towers.Projectile
             CurrentTimeout = Interval;
         }
 
-        public void WearOn(BaseMonster monster)
+        public virtual void WearOn(BaseMonster monster)
         {
             if (!monster.GiveEffect(this))
                 return;
@@ -56,7 +45,7 @@ namespace Towers.Projectile
             }
         }
 
-        public void WearOf(BaseMonster monster)
+        public virtual void WearOf(BaseMonster monster)
         {
             if (monster.TryGetComponent(out SpriteRenderer spriteRenderer))
             {

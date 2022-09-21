@@ -11,7 +11,7 @@ namespace Towers.Projectile
         public Vector3 UDir { get; private set; }
         public float Speed { get; private set; }
         public int Damage { get; private set; }
-        public Effect Effect { get; private set; }
+        public BaseEffect Effect { get; private set; }
         public BaseTower Owner { get; private set; }
 
         // life-time in seconds;
@@ -48,11 +48,12 @@ namespace Towers.Projectile
                 return;
             
             monster.GainDamage(Damage, Owner);
-            Effect.WearOn(monster);
+            if (Effect is not null)
+                Effect.WearOn(monster);
             Destroy(gameObject);
         }
 
-        public void Setup(Vector3 uDir, float speed, int damage, Effect effect, BaseTower owner)
+        public void Setup(Vector3 uDir, float speed, int damage, BaseEffect effect, BaseTower owner)
         {
             UDir = uDir.normalized;
             Speed = speed;

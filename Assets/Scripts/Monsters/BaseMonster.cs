@@ -46,7 +46,7 @@ namespace Monsters
         protected EnemySelectable Selectable;
         protected CircleCollider2D collider;
 
-        protected readonly List<Effect> Effects = new List<Effect>();
+        protected readonly List<BaseEffect> Effects = new List<BaseEffect>();
         protected Stats CurrentStats;
 
         protected bool WasKilled = false;
@@ -76,8 +76,8 @@ namespace Monsters
             _lastpos = _curpos;
             _curpos = transform.position;
             
-            List<Effect> woreOff = new List<Effect>();
-            foreach (Effect effect in Effects)
+            List<BaseEffect> woreOff = new List<BaseEffect>();
+            foreach (BaseEffect effect in Effects)
             {
                 if (effect.CurrentTimeout > 0)
                 {
@@ -97,7 +97,7 @@ namespace Monsters
             }
             
             // remove the worn off
-            foreach (Effect wornOff in woreOff)
+            foreach (BaseEffect wornOff in woreOff)
             {
                 wornOff.WearOf(this);
                 Effects.Remove(wornOff);
@@ -118,9 +118,9 @@ namespace Monsters
             }
         }
 
-        public bool GiveEffect(Effect effect)
+        public bool GiveEffect(BaseEffect effect)
         {
-            foreach (Effect lEffect in Effects)
+            foreach (BaseEffect lEffect in Effects)
             {
                 if (lEffect.Type == effect.Type)
                     return false;
