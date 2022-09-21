@@ -99,7 +99,7 @@ namespace Monsters
             // remove the worn off
             foreach (BaseEffect wornOff in woreOff)
             {
-                wornOff.WearOf(this);
+                wornOff.WornOff(this);
                 Effects.Remove(wornOff);
             }
         }

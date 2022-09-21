@@ -48,8 +48,7 @@ namespace Towers.Projectile
                 return;
             
             monster.GainDamage(Damage, Owner);
-            if (Effect is not null)
-                Effect.WearOn(monster);
+            Effect?.WearOn(monster);
             Destroy(gameObject);
         }
 

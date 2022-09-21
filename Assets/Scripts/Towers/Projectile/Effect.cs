@@ -30,18 +30,19 @@ namespace Towers.Projectile
             CurrentTimeout = Interval;
         }
 
-        public virtual void WearOn(BaseMonster monster)
+        public virtual bool WearOn(BaseMonster monster)
         {
             if (!monster.GiveEffect(this))
-                return;
+                return false;
             // get the sprite of the monster
             if (monster.TryGetComponent(out SpriteRenderer spriteRenderer))
             {
                 spriteRenderer.color -= Color.white - TargetColour;
             }
+            return true;
         }
 
-        public virtual void WearOf(BaseMonster monster)
+        public virtual void WornOff(BaseMonster monster)
         {
             if (monster.TryGetComponent(out SpriteRenderer spriteRenderer))
             {
