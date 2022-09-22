@@ -616,8 +616,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 918385607}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1705,7 +1704,6 @@ GameObject:
   - component: {fileID: 662545985}
   - component: {fileID: 662545984}
   - component: {fileID: 662545983}
-  - component: {fileID: 662545982}
   - component: {fileID: 662545981}
   m_Layer: 0
   m_Name: EasyMonster
@@ -1744,24 +1742,16 @@ MonoBehaviour:
   type: 0
   waveController: {fileID: 1469318490}
   currencyController: {fileID: 407992647}
+  overlayCanvas: {fileID: 125498082}
+  targetCamera: {fileID: 1356214601}
+  referenceScreenHeight: 600
+  minAboveMonster: 45
+  hpSliderPrefab: {fileID: 3665330831788174277, guid: 62a1833e071cbbe419618ea601d58a8b, type: 3}
+  fullHpColour: {r: 0.3764706, g: 1, b: 0.29803923, a: 1}
+  depletedHpColour: {r: 0.8301887, g: 0.18405126, b: 0.18405126, a: 1}
   baseStats:
     speed: 3
     hp: 25
---- !u!114 &662545982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 662545979}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16195f0829b74257a8c749ccc7b488c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetCamera: {fileID: 1356214601}
-  selectMode: 0
-  enemyUi: {fileID: 918385606}
 --- !u!114 &662545983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2270,86 +2260,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &918385606
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 918385607}
-  - component: {fileID: 918385609}
-  - component: {fileID: 918385608}
-  m_Layer: 5
-  m_Name: EnemyName
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &918385607
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 918385606}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 125498082}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -34.39}
-  m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &918385608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 918385606}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 25
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 2
-    m_MaxSize: 40
-    m_Alignment: 4
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: Enemy
---- !u!222 &918385609
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 918385606}
-  m_CullTransparentMesh: 1
 --- !u!1 &983674210
 GameObject:
   m_ObjectHideFlags: 0
@@ -2658,7 +2568,6 @@ GameObject:
   - component: {fileID: 1290367224}
   - component: {fileID: 1290367223}
   - component: {fileID: 1290367220}
-  - component: {fileID: 1290367222}
   - component: {fileID: 1290367219}
   m_Layer: 0
   m_Name: HardMonster
@@ -2697,6 +2606,13 @@ MonoBehaviour:
   type: 2
   waveController: {fileID: 1469318490}
   currencyController: {fileID: 407992647}
+  overlayCanvas: {fileID: 125498082}
+  targetCamera: {fileID: 1356214601}
+  referenceScreenHeight: 600
+  minAboveMonster: 45
+  hpSliderPrefab: {fileID: 3665330831788174277, guid: 62a1833e071cbbe419618ea601d58a8b, type: 3}
+  fullHpColour: {r: 0.3764706, g: 1, b: 0.29803923, a: 1}
+  depletedHpColour: {r: 0.83137256, g: 0.18431373, b: 0.18431373, a: 1}
   baseStats:
     speed: 6
     hp: 125
@@ -2770,21 +2686,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1290367222
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1290367217}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16195f0829b74257a8c749ccc7b488c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetCamera: {fileID: 1356214601}
-  selectMode: 0
-  enemyUi: {fileID: 918385606}
 --- !u!61 &1290367223
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4424,7 +4325,6 @@ GameObject:
   - component: {fileID: 1969628829}
   - component: {fileID: 1969628830}
   - component: {fileID: 1969628825}
-  - component: {fileID: 1969628828}
   - component: {fileID: 1969628827}
   m_Layer: 0
   m_Name: MediumMonster
@@ -4533,24 +4433,16 @@ MonoBehaviour:
   type: 1
   waveController: {fileID: 1469318490}
   currencyController: {fileID: 407992647}
+  overlayCanvas: {fileID: 125498082}
+  targetCamera: {fileID: 1356214601}
+  referenceScreenHeight: 600
+  minAboveMonster: 45
+  hpSliderPrefab: {fileID: 3665330831788174277, guid: 62a1833e071cbbe419618ea601d58a8b, type: 3}
+  fullHpColour: {r: 0.3764706, g: 1, b: 0.29803923, a: 1}
+  depletedHpColour: {r: 0.83137256, g: 0.18431373, b: 0.18431373, a: 1}
   baseStats:
     speed: 5
     hp: 100
---- !u!114 &1969628828
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1969628822}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16195f0829b74257a8c749ccc7b488c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetCamera: {fileID: 1356214601}
-  selectMode: 0
-  enemyUi: {fileID: 918385606}
 --- !u!50 &1969628829
 Rigidbody2D:
   serializedVersion: 4

@@ -6,11 +6,11 @@ using PathFinding;
 using Towers;
 using Towers.Projectile;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Monsters
 {
     [RequireComponent(typeof(PathTraverser))]
-    [RequireComponent(typeof(EnemySelectable))]
     public abstract class BaseMonster : MonoBehaviour
     {
         #region Enums
@@ -38,13 +38,21 @@ namespace Monsters
         [SerializeField] protected MonsterType type;
         [SerializeField] protected WaveController waveController;
         [SerializeField] protected CurrencyController currencyController;
+        [SerializeField] protected Transform overlayCanvas;
+        [SerializeField] protected Camera targetCamera;
+        [SerializeField] protected int referenceScreenHeight = 800;
+        [SerializeField] protected float minAboveMonster = 40;
+        [SerializeField] protected GameObject hpSliderPrefab;
+        [SerializeField] protected Color fullHpColour;
+        [SerializeField] protected Color depletedHpColour;
+        protected GameObject CurrentHpSlider;
         public Stats baseStats;
 
         public MonsterType Type => type;
 
         protected PathTraverser PathTraverser;
-        protected EnemySelectable Selectable;
         protected CircleCollider2D collider;
+
 
         protected readonly List<BaseEffect> Effects = new List<BaseEffect>();
         protected Stats CurrentStats;
@@ -61,12 +69,12 @@ namespace Monsters
         protected virtual void Start()
         {
             PathTraverser = GetComponent<PathTraverser>();
-            Selectable = GetComponent<EnemySelectable>();
             
             SetSpeed(baseStats.speed);
             CurrentStats.hp = baseStats.hp;
             collider = GetComponent<CircleCollider2D>();
             _curpos = transform.position;
+            CurrentHpSlider = Instantiate(hpSliderPrefab, overlayCanvas);
         }
 
         // Update is called once per frame
@@ -102,20 +110,58 @@ namespace Monsters
                 wornOff.WornOff(this);
                 Effects.Remove(wornOff);
             }
+            
+            // update the hp-slider
+            if(!WasKilled)
+                UpdateHPUI();
         }
 
         protected virtual void OnDestroy()
         {
-            Selectable.Deselect();
             waveController.DecreaseLeft();
+            // destroy the enemy hp-bar
+            Destroy(CurrentHpSlider);
             // calculate its value only when it was killed
             if (WasKilled)
             {
-                int value = (int)(baseStats.hp / 10 + baseStats.speed);
+                int value = (int)(baseStats.hp / 2 + baseStats.speed);
                 currencyController.Add(value);
                 foreach (BaseTower hit in HitBy)
                     hit.XpUp(value);
             }
+        }
+
+        protected void UpdateHPUI()
+        {
+            Vector3 screenPos = targetCamera.WorldToScreenPoint(transform.position);
+            float heightMult = Screen.height / (float)referenceScreenHeight;
+            float minAbove = minAboveMonster * heightMult;
+            screenPos.y += minAbove;
+            CurrentHpSlider.transform.position = screenPos;
+            // try to get the slider-component from the hp-bar
+            if (!CurrentHpSlider.TryGetComponent(out Slider slider))
+            {
+                Debug.LogError("UI hp-bar prefab did not contain a Slider component");
+                return;
+            }
+
+            slider.value = CurrentStats.hp / (float) baseStats.hp;
+            // try to get the fore-ground element of the slider (second element, at index 1)
+            Transform foreChild = slider.transform.GetChild(1);
+            if (!foreChild)
+            {
+                Debug.LogError("UI hp-bar prefab did not have a foreground child");
+                return;
+            }
+
+            if (!foreChild.TryGetComponent(out Image foreground))
+            {
+                Debug.LogError("Foreground child did not contain an Image component");
+                return;
+            }
+
+            foreground.color = Color.Lerp(depletedHpColour, fullHpColour, slider.value);
+
         }
 
         public bool GiveEffect(BaseEffect effect)
