@@ -1226,7 +1226,7 @@ GameObject:
   - component: {fileID: 407992647}
   m_Layer: 0
   m_Name: CurrencyController
-  m_TagString: Untagged
+  m_TagString: CurrencyController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1259,7 +1259,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   amount: 100
-  currencyDisplay: {fileID: 463044176}
 --- !u!1 &416728580
 GameObject:
   m_ObjectHideFlags: 0
@@ -1425,6 +1424,7 @@ GameObject:
   - component: {fileID: 463044175}
   - component: {fileID: 463044177}
   - component: {fileID: 463044176}
+  - component: {fileID: 463044178}
   m_Layer: 5
   m_Name: CurrencyAmount
   m_TagString: Untagged
@@ -1494,6 +1494,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 463044174}
   m_CullTransparentMesh: 1
+--- !u!114 &463044178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463044174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca1c436c071f004e9c124ce7e91fde6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _text: {fileID: 0}
 --- !u!1 &511337286
 GameObject:
   m_ObjectHideFlags: 0
@@ -1983,6 +1996,7 @@ GameObject:
   - component: {fileID: 625645133}
   - component: {fileID: 625645135}
   - component: {fileID: 625645134}
+  - component: {fileID: 625645136}
   m_Layer: 5
   m_Name: WaveCount
   m_TagString: Untagged
@@ -2052,6 +2066,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 625645132}
   m_CullTransparentMesh: 1
+--- !u!114 &625645136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 625645132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca1c436c071f004e9c124ce7e91fde6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _text: {fileID: 0}
 --- !u!1 &641885872
 GameObject:
   m_ObjectHideFlags: 0

@@ -37,7 +37,6 @@ namespace Monsters
 
         [SerializeField] protected MonsterType type;
         [SerializeField] protected WaveController waveController;
-        [SerializeField] protected CurrencyController currencyController;
         [SerializeField] protected Transform overlayCanvas;
         [SerializeField] protected Camera targetCamera;
         [SerializeField] protected int referenceScreenHeight = 800;
@@ -52,6 +51,7 @@ namespace Monsters
 
         protected PathTraverser PathTraverser;
         protected CircleCollider2D collider;
+        protected CurrencyController CurrencyController;
 
 
         protected readonly List<BaseEffect> Effects = new List<BaseEffect>();
@@ -75,6 +75,7 @@ namespace Monsters
             collider = GetComponent<CircleCollider2D>();
             _curpos = transform.position;
             CurrentHpSlider = Instantiate(hpSliderPrefab, overlayCanvas);
+            CurrencyController = GameObject.FindWithTag("CurrencyController").GetComponent<CurrencyController>();
         }
 
         // Update is called once per frame
@@ -125,7 +126,7 @@ namespace Monsters
             if (WasKilled)
             {
                 int value = (int)(baseStats.hp / 2 + baseStats.speed);
-                currencyController.Add(value);
+                CurrencyController.Add(value);
                 foreach (BaseTower hit in HitBy)
                     hit.XpUp(value);
             }

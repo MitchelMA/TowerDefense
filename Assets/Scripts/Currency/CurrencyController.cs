@@ -8,12 +8,12 @@ namespace Currency
     public class CurrencyController : MonoBehaviour
     {
         [SerializeField] private ulong amount = 500;
-        [SerializeField] private Text currencyDisplay;
 
         private readonly Mutex _amountMutex = new Mutex();
+        public event EventHandler<ulong> MoneyChanged;
         private void Start()
         {
-            UpdateDisplay();
+            MoneyChanged?.Invoke(this, amount);
         }
 
         public bool Deplete(ulong decrease)
@@ -26,7 +26,7 @@ namespace Currency
             }
             
             amount -= decrease;
-            UpdateDisplay();
+            MoneyChanged?.Invoke(this, amount);
             _amountMutex.ReleaseMutex();
             return true;
         }
@@ -40,18 +40,13 @@ namespace Currency
         {
             _amountMutex.WaitOne();
             amount += addition;
-            UpdateDisplay();
+            MoneyChanged?.Invoke(this, amount);
             _amountMutex.ReleaseMutex();
         }
 
         public void Add(int addition)
         {
             Add(Convert.ToUInt64(addition));
-        }
-
-        private void UpdateDisplay()
-        {
-            currencyDisplay.text = $"{amount:D6} $";
         }
     }
 }
