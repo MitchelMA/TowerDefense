@@ -19,6 +19,23 @@ namespace Towers.Fire
             return true;
         }
 
+        protected override void UpdateStats()
+        {
+            // set the type
+            statsUI.StandAlones.typeText.text = $"Type: {Enum.GetName(typeof(BaseTower.TowerType), Type)}";
+            // set the lvl-points
+            statsUI.StandAlones.pointText.text = $"Points: {CurrentXpStats.lvlPoints}";
+            // set the xp
+            statsUI.StandAlones.xpCounter.text = $"xp:\n{CurrentXpStats.currentXp} / {CurrentXpStats.neededXp}";
+            // close btn
+            statsUI.StandAlones.closeBtn.onClick.RemoveAllListeners();
+            statsUI.StandAlones.closeBtn.onClick.AddListener(delegate
+            {
+                parentNode.Selectable.Deselect();
+            });
+            
+        }
+
         protected override void AfterLevelUp(int successiveCount)
         {
             Debug.Log($"Tower of type {Type} just leveled up: {CurrentXpStats.currentLvl -1} -> {CurrentXpStats.currentLvl}\nCalled in a row: {successiveCount}");

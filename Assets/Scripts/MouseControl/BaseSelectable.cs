@@ -17,6 +17,7 @@ namespace MouseControl
         public SelectType SelectMode => selectMode;
 
         protected bool _selected = false;
+        public bool IsSelected => _selected;
         
         // Start is called before the first frame update
         protected virtual void Start()

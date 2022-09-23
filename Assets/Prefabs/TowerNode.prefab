@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetCamera: {fileID: 0}
-  selectMode: 0
+  selectMode: 1
   towerNode: {fileID: 1760939405729260249}
 --- !u!58 &6379932268553316678
 CircleCollider2D:

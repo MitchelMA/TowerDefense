@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Monsters;
 using Towers.Projectile;
+using UI;
 using UnityEngine;
 
 namespace Towers
@@ -50,11 +51,14 @@ namespace Towers
         [SerializeField] protected Transform projectileParent;
         [SerializeField] protected string enemyTag;
         [SerializeField] protected int integralSteps = 10;
+        [SerializeField] protected TowerStatsUI statsUI;
         public Stats baseStats;
         public XpStats baseXpStats;
         
         private TowerType _type = TowerType.Unset;
         protected CircleCollider2D Collider;
+
+        protected TowerNode parentNode;
 
         #region Public Properties
         
@@ -106,12 +110,19 @@ namespace Towers
             Collider = GetComponent<CircleCollider2D>();
             SetRadius(baseStats.radius);
             currentShootTimeout = 0;
+            parentNode = transform.parent.GetComponent<TowerNode>();
         }
 
         protected virtual void Update()
         {
             if (currentShootTimeout >= 0)
                 currentShootTimeout -= Time.deltaTime;
+            
+            // update its statistics
+            if (parentNode.Selectable.IsSelected)
+            {
+                UpdateStats();
+            }
         }
 
         protected void OnTriggerStay2D(Collider2D other)
@@ -159,9 +170,6 @@ namespace Towers
 
             Vector3 max = monPos + monDir * monSpeed * dur;
             float timeDiff = CalcTimeDiff(monster, max);
-            // almost impossible to hit monster
-            // if (timeDiff > 0.17)
-            //     return false;
 
             Vector3 min = monPos + monDir * monSpeed * (dur + timeDiff);
             Vector3 middle = Vector3.Lerp(min, max, 0.5f);
@@ -259,6 +267,7 @@ namespace Towers
             Collider.radius = newRadius;
         }
 
-        
+        protected abstract void UpdateStats();
+
     }
 }
