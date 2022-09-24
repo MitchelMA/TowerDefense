@@ -145,7 +145,7 @@ namespace Towers
             // update its statistics
             if (parentNode.Selectable.IsSelected)
             {
-                UpdateStats();
+                UpdateStatsDisplay();
             }
         }
 
@@ -302,7 +302,7 @@ namespace Towers
             Collider.radius = newRadius;
         }
 
-        protected virtual void UpdateStats()
+        protected virtual void UpdateStatsDisplay()
         {
             // set the type
             statsUI.StandAlones.typeText.text = $"Type: {Enum.GetName(typeof(BaseTower.TowerType), Type)}";
@@ -324,8 +324,8 @@ namespace Towers
 
             // update the base-stats
             statsUI.StatsTexts.damage.text = $"Damage: {CurrentStats.damage}";
-            statsUI.StatsTexts.fireRate.text = $"Fire-Rate: {CurrentStats.fireRate}p/s";
-            statsUI.StatsTexts.projectileSpeed.text = $"Bullet-Speed: {CurrentStats.projectileSpeed}m/s";
+            statsUI.StatsTexts.fireRate.text = $"Fire-Rate: {CurrentStats.fireRate:0.00}p/s";
+            statsUI.StatsTexts.projectileSpeed.text = $"Bullet-Speed: {CurrentStats.projectileSpeed:0.00}m/s";
             statsUI.StatsTexts.radius.text = $"Radius: {CurrentStats.radius}m";
 
             if (RadiusIndicator)

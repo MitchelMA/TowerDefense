@@ -19,13 +19,13 @@ namespace Towers.Fire
             return true;
         }
 
-        protected override void UpdateStats()
+        protected override void UpdateStatsDisplay()
         {
-            base.UpdateStats();
+            base.UpdateStatsDisplay();
             // show the effect stats
             statsUI.EffectStatsTexts.value.text = $"Damage: {_currentEffectStats.damage}";
-            statsUI.EffectStatsTexts.interval.text = $"Interval: {1 / _currentEffectStats.interval}p/s";
-            statsUI.EffectStatsTexts.duration.text = $"Duration: {_currentEffectStats.duration}s";
+            statsUI.EffectStatsTexts.interval.text = $"Interval: {(1 / _currentEffectStats.interval):0.00}p/s";
+            statsUI.EffectStatsTexts.duration.text = $"Duration: {_currentEffectStats.duration:0.00}s";
         }
 
         public override void UpdateStatsBtns()
