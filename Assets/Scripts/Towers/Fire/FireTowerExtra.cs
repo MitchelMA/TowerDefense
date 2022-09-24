@@ -17,9 +17,28 @@ namespace Towers.Fire
             public Color effectColour;
         }
 
+        [Serializable]
+        public struct EffectStatsUp
+        {
+            public int damage;
+            public float interval;
+            public float duration;
+        }
+
+        public struct EffectStatsDiff
+        {
+            public EffectStats Previous;
+            public EffectStats Current;
+        }
+
         public EffectStats baseEffectStats;
 
         private EffectStats _currentEffectStats;
+
+        [SerializeField] private EffectStatsUp effectStatsIncrease;
+
+        public event EventHandler<EffectStatsDiff> EffectStatsChanged; 
+
         protected override void Start()
         {
             // Call the base class' Start method

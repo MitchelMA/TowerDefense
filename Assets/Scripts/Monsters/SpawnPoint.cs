@@ -17,6 +17,7 @@ namespace Monsters
             // apply the multiplier
             monsterData.baseStats.hp = (int)(monsterData.baseStats.hp * difficultyMultiplier);
             monsterData.baseStats.speed *= difficultyMultiplier;
+            monsterData.baseStats.damage = (int)(monsterData.baseStats.damage * difficultyMultiplier);
         }
     }
 }

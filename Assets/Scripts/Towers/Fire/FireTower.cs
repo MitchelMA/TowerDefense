@@ -21,24 +21,79 @@ namespace Towers.Fire
 
         protected override void UpdateStats()
         {
-            // set the type
-            statsUI.StandAlones.typeText.text = $"Type: {Enum.GetName(typeof(BaseTower.TowerType), Type)}";
-            // set the lvl-points
-            statsUI.StandAlones.pointText.text = $"Points: {CurrentXpStats.lvlPoints}";
-            // set the xp
-            statsUI.StandAlones.xpCounter.text = $"xp:\n{CurrentXpStats.currentXp} / {CurrentXpStats.neededXp}";
-            // close btn
-            statsUI.StandAlones.closeBtn.onClick.RemoveAllListeners();
-            statsUI.StandAlones.closeBtn.onClick.AddListener(delegate
+            base.UpdateStats();
+            // show the effect stats
+            statsUI.EffectStatsTexts.value.text = $"Damage: {_currentEffectStats.damage}";
+            statsUI.EffectStatsTexts.interval.text = $"Interval: {1 / _currentEffectStats.interval}p/s";
+            statsUI.EffectStatsTexts.duration.text = $"Duration: {_currentEffectStats.duration}s";
+        }
+
+        public override void UpdateStatsBtns()
+        {
+            base.UpdateStatsBtns();
+            
+            statsUI.EffectStatsBtns.duration.onClick.RemoveAllListeners();
+            statsUI.EffectStatsBtns.duration.onClick.AddListener(delegate
             {
-                parentNode.Selectable.Deselect();
+                IncreaseEffectStats(0, effectStatsIncrease.duration, 0);
+                CurrentXpStats.lvlPoints--;
+                UpdateStatsBtns();
             });
             
+            statsUI.EffectStatsBtns.interval.onClick.RemoveAllListeners();
+            statsUI.EffectStatsBtns.interval.onClick.AddListener(delegate
+            {
+                IncreaseEffectStats(0, 0, effectStatsIncrease.interval);
+                CurrentXpStats.lvlPoints--;
+                UpdateStatsBtns();
+            });
+            
+            statsUI.EffectStatsBtns.value.onClick.RemoveAllListeners();
+            statsUI.EffectStatsBtns.value.onClick.AddListener(delegate
+            {
+                IncreaseEffectStats(effectStatsIncrease.damage, 0, 0);
+                CurrentXpStats.lvlPoints--;
+                UpdateStatsBtns();
+            });
         }
+        
 
         protected override void AfterLevelUp(int successiveCount)
         {
-            Debug.Log($"Tower of type {Type} just leveled up: {CurrentXpStats.currentLvl -1} -> {CurrentXpStats.currentLvl}\nCalled in a row: {successiveCount}");
+            base.AfterLevelUp(successiveCount);
+            
+            IncreaseEffectStats(effectStatsIncrease.damage, effectStatsIncrease.duration, effectStatsIncrease.interval);
+        }
+
+        private void IncreaseEffectStats(int damage, float duration, float interval)
+        {
+            EffectStats old = new EffectStats
+            {
+                damage = _currentEffectStats.damage,
+                duration = _currentEffectStats.duration,
+                effectColour = new Color(_currentEffectStats.effectColour.a, _currentEffectStats.effectColour.g,
+                    _currentEffectStats.effectColour.b),
+                interval = _currentEffectStats.interval,
+            };
+            _currentEffectStats.damage += damage;
+            _currentEffectStats.duration += duration;
+            _currentEffectStats.interval = 1 / (1 / _currentEffectStats.interval + interval);
+            EffectStats newS = new EffectStats()
+            {
+                damage = _currentEffectStats.damage,
+                duration = _currentEffectStats.duration,
+                effectColour = new Color(_currentEffectStats.effectColour.a, _currentEffectStats.effectColour.g,
+                    _currentEffectStats.effectColour.b),
+                interval = _currentEffectStats.interval,
+            };
+
+            EffectStatsDiff diff = new EffectStatsDiff
+            {
+                Previous = old,
+                Current = newS
+            };
+            
+            EffectStatsChanged?.Invoke(this, diff);
         }
     }
 }

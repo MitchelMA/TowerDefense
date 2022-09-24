@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Monsters
@@ -45,7 +46,6 @@ namespace Monsters
         private bool _allWavesSpawned = false;
         private Mutex _leftMutex = new Mutex();
         private int _monstersLeft;
-        
 
         public int CurrentWaveTotal => _currentWaveTotalAmount;
         // standard set to false to false so the first wave doesn't automatically start when entered
@@ -53,13 +53,19 @@ namespace Monsters
         public bool AllWavesSpawned => _allWavesSpawned;
         public int MonstersLeft => _monstersLeft;
         public bool PreviousWaveFinished => _monstersLeft <= 0;
+        public int CurrentWave => _currentWave;
         
+        public event EventHandler<int> AllWavesFinished;
+        public event EventHandler<int> FinishedWave; 
+
         // Start is called before the first frame update
         private void Start()
         {
             // setup the first wave
             SetupWave(0);
             UpdateWaveCounter();
+
+            AllWavesFinished += GameWon;
         }
 
         // Update is called once per frame
@@ -174,6 +180,7 @@ namespace Monsters
             // reset the timeout
             _currentTimeout = 0;
             // prepare the next wave
+            FinishedWave?.Invoke(this, _currentWave);
             if (++_currentWave >= waves.Length)
             {
                 SpawnedAllWaves();
@@ -211,6 +218,13 @@ namespace Monsters
         private void FinishedAllWaves()
         {
             Debug.Log("Finished all waves!");
+            AllWavesFinished?.Invoke(this, _currentWave);
+        }
+
+        private void GameWon(object sender, int wave)
+        {
+            Debug.Log($"YOU WON THE GAME AFTER {wave} WAVES");
+            SceneManager.LoadScene("GameWonScene");
         }
 
         private void UpdateWaveCounter()

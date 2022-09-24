@@ -31,12 +31,13 @@ namespace Monsters
         {
             public float speed;
             public int hp;
+            public int damage;
         }
 
         #endregion
 
         [SerializeField] protected MonsterType type;
-        [SerializeField] protected WaveController waveController;
+        protected WaveController waveController;
         [SerializeField] protected Transform overlayCanvas;
         [SerializeField] protected Camera targetCamera;
         [SerializeField] protected int referenceScreenHeight = 800;
@@ -69,6 +70,7 @@ namespace Monsters
         protected virtual void Start()
         {
             PathTraverser = GetComponent<PathTraverser>();
+            waveController = GameObject.FindWithTag("WaveController").GetComponent<WaveController>();
             
             SetSpeed(baseStats.speed);
             CurrentStats.hp = baseStats.hp;
@@ -125,7 +127,7 @@ namespace Monsters
             // calculate its value only when it was killed
             if (WasKilled)
             {
-                int value = (int)(baseStats.hp / 2 + baseStats.speed);
+                int value = (int)(baseStats.hp / 2 + baseStats.speed*2);
                 CurrencyController.Add(value);
                 foreach (BaseTower hit in HitBy)
                     hit.XpUp(value);

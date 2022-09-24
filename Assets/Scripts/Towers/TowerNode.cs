@@ -35,32 +35,38 @@ namespace Towers
             
         }
 
-        public void PlaceTower(BaseTower.TowerType type)
+        public bool PlaceTower(BaseTower.TowerType type)
         {
             Debug.Log("PlaceTower was called");
-            if (HasTower)
-            {
-                // Destroy(_currentTower);
-                return;
-            }
             
             if (!_factory.CreateTower(type, out GameObject tower))
             {
-                return;
+                return false;
             }
 
             if (!tower.TryGetComponent(out BaseTower towerScript))
             {
                 Debug.LogError($"Tower GameObject didn't contain a component of type {typeof(BaseTower)}");
-                return;
+                return false;
             }
 
             _currentTower = Instantiate(towerScript, transform);
+            return true;
         }
 
-        public void PlaceTower(int type)
+        public bool RemoveTower()
         {
-            PlaceTower((BaseTower.TowerType) type);
+            if (!HasTower)
+                return false;
+            
+            _selectable.Deselect();
+            Destroy(_currentTower.gameObject);
+            return true;
+        }
+
+        public bool PlaceTower(int type)
+        {
+            return PlaceTower((BaseTower.TowerType) type);
         }
     }
 }

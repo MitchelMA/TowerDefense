@@ -8,9 +8,10 @@ namespace Currency
     public class CurrencyController : MonoBehaviour
     {
         [SerializeField] private ulong amount = 500;
-
+        
         private readonly Mutex _amountMutex = new Mutex();
         public event EventHandler<ulong> MoneyChanged;
+        public ulong Amount => amount;
         private void Start()
         {
             MoneyChanged?.Invoke(this, amount);
@@ -19,7 +20,7 @@ namespace Currency
         public bool Deplete(ulong decrease)
         {
             _amountMutex.WaitOne();
-            if (amount - decrease <= 0)
+            if (decrease > amount)
             {
                 _amountMutex.ReleaseMutex();
                 return false;

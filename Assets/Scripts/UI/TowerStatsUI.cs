@@ -14,6 +14,7 @@ namespace UI
             public Text typeText;
             public Text pointText;
             public Text xpCounter;
+            public Text levelDisplay;
             public Button closeBtn;
             public Button destroyBtn;
         }

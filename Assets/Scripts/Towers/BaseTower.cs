@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Monsters;
+using MouseControl;
 using Towers.Projectile;
 using UI;
 using UnityEngine;
@@ -35,6 +36,12 @@ namespace Towers
             public float radius;
         }
 
+        public struct StatsDiff
+        {
+            public Stats Previous;
+            public Stats Current;
+        }
+
         [Serializable]
         public struct XpStats
         {
@@ -43,6 +50,16 @@ namespace Towers
             public int xpIncreaseOnLevelUp;
             public int lvlPoints;
             public int currentLvl;
+            public int maxLevel;
+        }
+
+        [Serializable]
+        public struct StatsUp
+        {
+            public int damage;
+            public float fireRate;
+            public float projectileSpeed;
+            public float radius;
         }
 
         #endregion
@@ -52,8 +69,12 @@ namespace Towers
         [SerializeField] protected string enemyTag;
         [SerializeField] protected int integralSteps = 10;
         [SerializeField] protected TowerStatsUI statsUI;
+        
         public Stats baseStats;
         public XpStats baseXpStats;
+        [SerializeField] protected StatsUp statsIncrease;
+
+        [NonSerialized] public GameObject RadiusIndicator;
         
         private TowerType _type = TowerType.Unset;
         protected CircleCollider2D Collider;
@@ -83,6 +104,8 @@ namespace Towers
 
         #endregion
 
+        public event EventHandler<StatsDiff> BaseStatsChanged; 
+
         /// <summary>
         /// The Start method of the BaseTower should always be called with
         /// `base.Start()` when overriding. This is because the Start method
@@ -101,6 +124,7 @@ namespace Towers
             CurrentXpStats = new XpStats
             {
                 currentLvl = baseXpStats.currentLvl,
+                maxLevel = baseXpStats.maxLevel,
                 currentXp = baseXpStats.currentXp,
                 lvlPoints = baseXpStats.lvlPoints,
                 neededXp = baseXpStats.neededXp,
@@ -141,7 +165,16 @@ namespace Towers
         /// Method that automatically gets called after the tower gained a level
         /// </summary>
         /// <param name="successiveCount">The amount of times this function was called in a row thusfar</param>
-        protected virtual void AfterLevelUp(int successiveCount) { }
+        protected virtual void AfterLevelUp(int successiveCount)
+        {
+            IncreaseBaseStats(statsIncrease.damage, statsIncrease.radius, statsIncrease.fireRate, statsIncrease.projectileSpeed);
+            
+            // check for the buttons
+            if (parentNode.Selectable.IsSelected)
+            {
+                UpdateStatsBtns();
+            }
+        }
         
         /// <summary>
         /// Method that automatically gets called after gaining xp
@@ -222,6 +255,8 @@ namespace Towers
         /// <returns>The amount of levels the tower went up after gaining the xp</returns>
         public int XpUp(int xp)
         {
+            if (CurrentXpStats.currentLvl >= CurrentXpStats.maxLevel)
+                return 0;
             CurrentXpStats.currentXp += xp;
             int gainedLevels = CheckLvlUp();
             
@@ -267,7 +302,121 @@ namespace Towers
             Collider.radius = newRadius;
         }
 
-        protected abstract void UpdateStats();
+        protected virtual void UpdateStats()
+        {
+            // set the type
+            statsUI.StandAlones.typeText.text = $"Type: {Enum.GetName(typeof(BaseTower.TowerType), Type)}";
+            // set the lvl-points
+            statsUI.StandAlones.pointText.text = $"Points: {CurrentXpStats.lvlPoints}";
+            // set the xp
+            statsUI.StandAlones.xpCounter.text = $"Xp:\n{CurrentXpStats.currentXp} / {CurrentXpStats.neededXp}";
+            // set the level
+            statsUI.StandAlones.levelDisplay.text = $"Level: {CurrentXpStats.currentLvl}";
+            // close btn
+            statsUI.StandAlones.closeBtn.onClick.RemoveAllListeners();
+            statsUI.StandAlones.closeBtn.onClick.AddListener(parentNode.Selectable.Deselect);
+            // destroy btn
+            statsUI.StandAlones.destroyBtn.onClick.RemoveAllListeners();
+            statsUI.StandAlones.destroyBtn.onClick.AddListener(delegate
+            {
+                parentNode.RemoveTower();
+            });
 
+            // update the base-stats
+            statsUI.StatsTexts.damage.text = $"Damage: {CurrentStats.damage}";
+            statsUI.StatsTexts.fireRate.text = $"Fire-Rate: {CurrentStats.fireRate}p/s";
+            statsUI.StatsTexts.projectileSpeed.text = $"Bullet-Speed: {CurrentStats.projectileSpeed}m/s";
+            statsUI.StatsTexts.radius.text = $"Radius: {CurrentStats.radius}m";
+
+            if (RadiusIndicator)
+            {
+                RadiusIndicator.transform.localScale = new Vector2(CurrentStats.radius*2, CurrentStats.radius*2);
+            }
+        }
+
+        public virtual void UpdateStatsBtns()
+        {
+            int points = CurrentXpStats.lvlPoints;
+            statsUI.StatsBtns.damage.interactable = points > 0;
+            statsUI.StatsBtns.radius.interactable = points > 0;
+            statsUI.StatsBtns.fireRate.interactable = points > 0;
+            statsUI.StatsBtns.projectileSpeed.interactable = points > 0;
+            
+            statsUI.EffectStatsBtns.duration.interactable = points > 0;
+            statsUI.EffectStatsBtns.interval.interactable = points > 0;
+            statsUI.EffectStatsBtns.value.interactable = points > 0;
+            
+            statsUI.StatsBtns.damage.onClick.RemoveAllListeners();
+            statsUI.StatsBtns.damage.onClick.AddListener(delegate
+            {
+                IncreaseBaseStats(statsIncrease.damage, 0, 0, 0);
+                CurrentXpStats.lvlPoints--;
+                UpdateStatsBtns();
+            });
+            
+            statsUI.StatsBtns.radius.onClick.RemoveAllListeners();
+            statsUI.StatsBtns.radius.onClick.AddListener(delegate
+            {
+                IncreaseBaseStats(0, statsIncrease.radius, 0, 0);
+                CurrentXpStats.lvlPoints--;
+                UpdateStatsBtns();
+            });
+            
+            statsUI.StatsBtns.fireRate.onClick.RemoveAllListeners();
+            statsUI.StatsBtns.fireRate.onClick.AddListener(delegate
+            {
+                IncreaseBaseStats(0, 0, statsIncrease.fireRate, 0);
+                CurrentXpStats.lvlPoints--;
+                UpdateStatsBtns();
+            });
+            
+            statsUI.StatsBtns.projectileSpeed.onClick.RemoveAllListeners();
+            statsUI.StatsBtns.projectileSpeed.onClick.AddListener(delegate
+            {
+                IncreaseBaseStats(0, 0, 0, statsIncrease.projectileSpeed);
+                CurrentXpStats.lvlPoints--;
+                UpdateStatsBtns();
+            });
+        }
+
+        public virtual void NonInteractebleBtns()
+        {
+            statsUI.StatsBtns.damage.interactable = false;
+            statsUI.StatsBtns.radius.interactable = false;
+            statsUI.StatsBtns.fireRate.interactable = false;
+            statsUI.StatsBtns.projectileSpeed.interactable = false;
+            
+            statsUI.EffectStatsBtns.duration.interactable = false;
+            statsUI.EffectStatsBtns.interval.interactable = false;
+            statsUI.EffectStatsBtns.value.interactable = false;
+        }
+
+        protected void IncreaseBaseStats(int damage, float radius, float fireRate, float projectileSpeed)
+        {
+            Stats old = new Stats
+            {
+                damage = CurrentStats.damage,
+                fireRate = CurrentStats.fireRate,
+                projectileSpeed = CurrentStats.projectileSpeed,
+                radius = CurrentStats.radius,
+            };
+            CurrentStats.damage += damage;
+            CurrentStats.fireRate += fireRate;
+            CurrentStats.projectileSpeed += projectileSpeed;
+            SetRadius(CurrentStats.radius + radius);
+            Stats newS = new Stats
+            {
+                damage = CurrentStats.damage,
+                fireRate = CurrentStats.fireRate,
+                projectileSpeed = CurrentStats.projectileSpeed,
+                radius = CurrentStats.radius,
+            };
+            StatsDiff diff = new StatsDiff
+            {
+                Previous = old,
+                Current = newS,
+            };
+            BaseStatsChanged?.Invoke(this, diff);
+        }
     }
 }
