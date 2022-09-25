@@ -166,6 +166,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   indicator: {fileID: 4653981343288950465}
-  minIndicatorSize: 1.3
+  minIndicatorSize: 1
   indicatorAmplitude: 1
   indicatorSeries: 3

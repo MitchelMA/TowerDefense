@@ -59,9 +59,9 @@ namespace Towers
                 Debug.LogError("There wasn't a complete CurrencyController in this scene");
             }
 
+            _indicatorColour = indicator.color;
             _selectable = GetComponent<TowerSelectable>();
             _selectable.OnStatusChanged += OnSelect;
-            _indicatorColour = indicator.color;
             _currencyController.MoneyChanged += HandleCurrencyChange;
             IndicatingStateChange += HandleIndicatingStateChange;
         }
