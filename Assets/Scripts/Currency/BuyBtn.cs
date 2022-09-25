@@ -7,7 +7,8 @@ namespace Currency
 {
     public class BuyBtn : MonoBehaviour
     {
-        [SerializeField] private ulong buyValue;
+        [SerializeField] private BaseTower.TowerType buyType;
+        private ulong buyValue;
         private CurrencyController _controller;
 
         public Button Button { get; private set; }
@@ -17,8 +18,9 @@ namespace Currency
         {
             Button = GetComponentInChildren<Button>();
             Text = transform.GetChild(1).GetComponent<Text>();
-            Text.text = $"{buyValue} $";
             _controller = GameObject.FindWithTag("CurrencyController").GetComponent<CurrencyController>();
+            buyValue = _controller.GetPriceOfType(buyType);
+            Text.text = $"{buyValue} $";
             _controller.MoneyChanged += CheckAvailable;
             CheckAvailable(_controller, _controller.Amount);
         }

@@ -376,7 +376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 180de4ca636a9a54c9ff777a2d8441e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buyValue: 150
+  buyType: 3
 --- !u!1 &38651295
 GameObject:
   m_ObjectHideFlags: 0
@@ -1563,7 +1563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 180de4ca636a9a54c9ff777a2d8441e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buyValue: 100
+  buyType: 2
 --- !u!1 &407992645
 GameObject:
   m_ObjectHideFlags: 0
@@ -1609,6 +1609,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   amount: 400
+  prices:
+  - price: 100
+    type: 1
+  - price: 100
+    type: 2
+  - price: 150
+    type: 3
 --- !u!1 &408821831
 GameObject:
   m_ObjectHideFlags: 0
@@ -3526,7 +3533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 180de4ca636a9a54c9ff777a2d8441e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buyValue: 100
+  buyType: 1
 --- !u!1 &892341564
 GameObject:
   m_ObjectHideFlags: 0
