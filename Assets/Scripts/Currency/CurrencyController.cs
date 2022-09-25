@@ -34,8 +34,6 @@ namespace Currency
         public ulong Amount => amount;
         private void Start()
         {
-            MoneyChanged?.Invoke(this, amount);
-            
             // set of the arrays
             _towerPrices = new ulong[prices.Length];
             _towerTypes = new BaseTower.TowerType[prices.Length];
@@ -44,6 +42,8 @@ namespace Currency
                 _towerPrices[i] = prices[i].price;
                 _towerTypes[i] = prices[i].type;
             }
+            // call the event
+            MoneyChanged?.Invoke(this, amount);
         }
 
         public bool Deplete(ulong decrease)

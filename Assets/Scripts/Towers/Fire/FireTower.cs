@@ -49,6 +49,7 @@ namespace Towers.Fire
             {
                 IncreaseEffectStats(0, effectStatsIncrease.duration, 0);
                 CurrentXpStats.lvlPoints--;
+                parentNode.Indicating = false;
                 UpdateStatsBtns();
             });
             
@@ -57,6 +58,7 @@ namespace Towers.Fire
             {
                 IncreaseEffectStats(0, 0, effectStatsIncrease.interval);
                 CurrentXpStats.lvlPoints--;
+                parentNode.Indicating = false;
                 UpdateStatsBtns();
             });
             
@@ -65,6 +67,7 @@ namespace Towers.Fire
             {
                 IncreaseEffectStats(effectStatsIncrease.damage, 0, 0);
                 CurrentXpStats.lvlPoints--;
+                parentNode.Indicating = false;
                 UpdateStatsBtns();
             });
         }

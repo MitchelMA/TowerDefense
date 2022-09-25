@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using Currency;
 using MouseControl;
 using UI;
 using UnityEngine;
@@ -8,8 +11,30 @@ namespace Towers
     [RequireComponent(typeof(CircleCollider2D))]
     public class TowerNode : MonoBehaviour
     {
+        [SerializeField] private SpriteRenderer indicator;
+        [SerializeField] private float minIndicatorSize;
+        [SerializeField] private float indicatorAmplitude;
+        [SerializeField] private float indicatorSeries;
+        private float _seriesProgression = 0;
         private BaseTower _currentTower;
         private TowerFactory _factory;
+        private CurrencyController _currencyController;
+        private Color _indicatorColour;
+        private bool _indicating = false;
+
+        public bool Indicating
+        {
+            get => _indicating;
+            set
+            {
+                // don't change when the value is the same
+                if(_indicating == value)
+                    return;
+                
+                _indicating = value;
+                IndicatingStateChange?.Invoke(this, value);
+            }
+        }
 
         public BaseTower CurrentTower => _currentTower;
         
@@ -18,21 +43,80 @@ namespace Towers
         private TowerSelectable _selectable;
         public TowerSelectable Selectable => _selectable;
 
+        public event EventHandler<bool> IndicatingStateChange;
+        
+
         // Start is called before the first frame update
         private void Start()
         {
-            if (GameObject.FindWithTag("TowerFactory")?.TryGetComponent(out _factory) == false)
+            if (!GameObject.FindWithTag("TowerFactory").TryGetComponent(out _factory))
             {
                 Debug.LogError("There wasn't a complete TowerFactory in this scene", this);
             }
 
+            if (!GameObject.FindWithTag("CurrencyController").TryGetComponent(out _currencyController))
+            {
+                Debug.LogError("There wasn't a complete CurrencyController in this scene");
+            }
+
             _selectable = GetComponent<TowerSelectable>();
+            _selectable.OnStatusChanged += OnSelect;
+            _indicatorColour = indicator.color;
+            _currencyController.MoneyChanged += HandleCurrencyChange;
+            IndicatingStateChange += HandleIndicatingStateChange;
+        }
+
+        private void HandleCurrencyChange(object sender, ulong newAmount)
+        {
+            if (HasTower)
+                return;
+
+            List<ulong> sorted = _currencyController.TowerPrices;
+            sorted.Sort();
+            ulong lowest = sorted[0];
+            Indicating = newAmount >= lowest;
+        }
+
+        private void HandleIndicatingStateChange(object sender, bool newStatus)
+        {
+            if (newStatus)
+                IndicatingStart();
+            else
+                IndicatingEnd();
+        }
+
+        private void IndicatingStart()
+        {
+            indicator.color = new Color(_indicatorColour.r, _indicatorColour.g, _indicatorColour.b, _indicatorColour.a);
+        }
+
+        private void IndicatingEnd()
+        {
+            transform.localScale = Vector3.one;
+            indicator.color = new Color(_indicatorColour.r, _indicatorColour.g, _indicatorColour.b, 0);
+        }
+
+        private void OnSelect(object sender, bool selectedStatus)
+        {
+            if (!selectedStatus)
+                return;
+
+            // reset the indicating when the node has a tower
+            if (HasTower)
+                Indicating = false;
         }
 
         // Update is called once per frame
         private void Update()
         {
-            
+            // show the indication
+            if (!_indicating)
+                return;
+
+            _seriesProgression = (_seriesProgression + Time.deltaTime) % (Mathf.PI / indicatorSeries);
+            float scaleValue = minIndicatorSize + Mathf.Pow( indicatorAmplitude * Mathf.Sin(_seriesProgression * indicatorSeries), 2);
+            Vector3 scaleVector = new Vector3(scaleValue, scaleValue);
+            indicator.transform.localScale = scaleVector;
         }
 
         public bool PlaceTower(BaseTower.TowerType type)
@@ -51,17 +135,22 @@ namespace Towers
             }
 
             _currentTower = Instantiate(towerScript, transform);
+            // stop indicating
+            Indicating = false;
             return true;
         }
 
-        public bool RemoveTower()
+        public BaseTower.TowerType RemoveTower()
         {
+            BaseTower.TowerType type = BaseTower.TowerType.Unset;
             if (!HasTower)
-                return false;
+                return type;
             
             _selectable.Deselect();
+            type = _currentTower.Type;
             Destroy(_currentTower.gameObject);
-            return true;
+            _currentTower = null;
+            return type;
         }
 
         public bool PlaceTower(int type)

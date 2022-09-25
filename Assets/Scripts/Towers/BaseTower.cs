@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Currency;
 using Monsters;
 using MouseControl;
 using Towers.Projectile;
@@ -78,8 +79,9 @@ namespace Towers
         
         private TowerType _type = TowerType.Unset;
         protected CircleCollider2D Collider;
-
+        
         protected TowerNode parentNode;
+        protected CurrencyController _currencyController;
 
         #region Public Properties
         
@@ -137,6 +139,7 @@ namespace Towers
             parentNode = transform.parent.GetComponent<TowerNode>();
             parentNode.Selectable.OnStatusChanged += OnParentSelect;
             BaseStatsChanged += StatsHaveChanged;
+            _currencyController = GameObject.FindWithTag("CurrencyController").GetComponent<CurrencyController>();
         }
 
         protected void OnParentSelect(object sender, bool selectedStatus)
@@ -190,6 +193,9 @@ namespace Towers
             {
                 UpdateStatsBtns();
             }
+            
+            // show indication of leveling up
+            parentNode.Indicating = true;
         }
         
         /// <summary>
@@ -335,7 +341,12 @@ namespace Towers
             statsUI.StandAlones.destroyBtn.onClick.RemoveAllListeners();
             statsUI.StandAlones.destroyBtn.onClick.AddListener(delegate
             {
-                parentNode.RemoveTower();
+                TowerType type = parentNode.RemoveTower();
+                if (type == TowerType.Unset)
+                    return;
+
+                ulong returnPrice = (ulong)(_currencyController.GetPriceOfType(type) * 0.5f);
+                _currencyController.Add(returnPrice);
             });
 
             // update the base-stats
@@ -367,6 +378,7 @@ namespace Towers
             {
                 IncreaseBaseStats(statsIncrease.damage, 0, 0, 0);
                 CurrentXpStats.lvlPoints--;
+                parentNode.Indicating = false;
                 UpdateStatsBtns();
             });
             
@@ -383,6 +395,7 @@ namespace Towers
             {
                 IncreaseBaseStats(0, 0, statsIncrease.fireRate, 0);
                 CurrentXpStats.lvlPoints--;
+                parentNode.Indicating = false;
                 UpdateStatsBtns();
             });
             
@@ -391,6 +404,7 @@ namespace Towers
             {
                 IncreaseBaseStats(0, 0, 0, statsIncrease.projectileSpeed);
                 CurrentXpStats.lvlPoints--;
+                parentNode.Indicating = false;
                 UpdateStatsBtns();
             });
         }
