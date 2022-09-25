@@ -135,18 +135,34 @@ namespace Towers
             SetRadius(baseStats.radius);
             currentShootTimeout = 0;
             parentNode = transform.parent.GetComponent<TowerNode>();
+            parentNode.Selectable.OnStatusChanged += OnParentSelect;
+            BaseStatsChanged += StatsHaveChanged;
+        }
+
+        protected void OnParentSelect(object sender, bool selectedStatus)
+        {
+            if (!selectedStatus) return;
+            
+            UpdateStatsDisplay();
+            UpdateStatsBtns();
+        }
+
+        protected void StatsHaveChanged(object sender, StatsDiff diff)
+        {
+            if(parentNode.Selectable.IsSelected)
+                UpdateStatsDisplay();
+        }
+
+        protected virtual void OnDestroy()
+        {
+            parentNode.Selectable.OnStatusChanged -= OnParentSelect;
+            BaseStatsChanged -= StatsHaveChanged;
         }
 
         protected virtual void Update()
         {
             if (currentShootTimeout >= 0)
                 currentShootTimeout -= Time.deltaTime;
-            
-            // update its statistics
-            if (parentNode.Selectable.IsSelected)
-            {
-                UpdateStatsDisplay();
-            }
         }
 
         protected void OnTriggerStay2D(Collider2D other)
@@ -302,7 +318,7 @@ namespace Towers
             Collider.radius = newRadius;
         }
 
-        protected virtual void UpdateStatsDisplay()
+        public virtual void UpdateStatsDisplay()
         {
             // set the type
             statsUI.StandAlones.typeText.text = $"Type: {Enum.GetName(typeof(BaseTower.TowerType), Type)}";

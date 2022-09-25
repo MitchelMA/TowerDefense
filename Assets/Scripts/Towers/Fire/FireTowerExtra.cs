@@ -54,6 +54,11 @@ namespace Towers.Fire
             
             // Set the corresponding type
             Type = TowerType.Fire;
+
+            EffectStatsChanged += EffectStatsHaveChanged;
+            
+            // simulate on parentSelect
+            OnParentSelect(parentNode.Selectable, parentNode.Selectable.IsSelected);
             
             Debug.Log($"Type: {Type}");
         }

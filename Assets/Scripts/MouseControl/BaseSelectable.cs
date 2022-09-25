@@ -18,6 +18,8 @@ namespace MouseControl
 
         protected bool _selected = false;
         public bool IsSelected => _selected;
+
+        public event EventHandler<bool> OnStatusChanged;
         
         // Start is called before the first frame update
         protected virtual void Start()
@@ -31,8 +33,16 @@ namespace MouseControl
         
         }
 
-        public abstract void Select();
+        public virtual void Select()
+        {
+            _selected = true;
+            OnStatusChanged?.Invoke(this, true);
+        }
 
-        public abstract void Deselect();
+        public virtual void Deselect()
+        {
+            _selected = false;
+            OnStatusChanged?.Invoke(this, false);
+        }
     }
 }

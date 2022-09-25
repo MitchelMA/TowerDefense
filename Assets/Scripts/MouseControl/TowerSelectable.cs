@@ -16,7 +16,6 @@ namespace MouseControl
         
         public override void Select()
         {
-            _selected = true;
             if (towerNode.HasTower)
             {
                 uiStats.gameObject.SetActive(true);
@@ -24,7 +23,8 @@ namespace MouseControl
                 // show the radius of the tower
                 _currentRadiusIndicator = Instantiate(radiusIndicatorPrefab, transform);
                 towerNode.CurrentTower.RadiusIndicator = _currentRadiusIndicator;
-                towerNode.CurrentTower.UpdateStatsBtns();
+                // towerNode.CurrentTower.UpdateStatsDisplay();
+                // towerNode.CurrentTower.UpdateStatsBtns();
             }
             else
             {
@@ -33,15 +33,18 @@ namespace MouseControl
                 uiStats.gameObject.SetActive(false);
                 SetupBuyUi();
             }
+            
+            base.Select();
         }
 
         public override void Deselect()
         {
-            _selected = false;
             uiStats.gameObject.SetActive(false);
             uiBuy.gameObject.SetActive(false);
             if(_currentRadiusIndicator)
                 Destroy(_currentRadiusIndicator);
+            
+            base.Deselect();
         }
 
         private void SetupBuyUi()
@@ -54,6 +57,7 @@ namespace MouseControl
             uiBuy.BuyButtons.fire.Button.onClick.AddListener(delegate
             {
                 uiBuy.BuyButtons.fire.BuyTower(towerNode, BaseTower.TowerType.Fire);
+                Deselect();
                 Select();
             });
             

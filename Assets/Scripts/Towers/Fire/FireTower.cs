@@ -19,7 +19,19 @@ namespace Towers.Fire
             return true;
         }
 
-        protected override void UpdateStatsDisplay()
+        private void EffectStatsHaveChanged(object sender, EffectStatsDiff diff)
+        {
+            if(parentNode.Selectable.IsSelected)
+                UpdateStatsDisplay();
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            EffectStatsChanged -= EffectStatsHaveChanged;
+        }
+
+        public override void UpdateStatsDisplay()
         {
             base.UpdateStatsDisplay();
             // show the effect stats
@@ -64,6 +76,7 @@ namespace Towers.Fire
             
             IncreaseEffectStats(effectStatsIncrease.damage, effectStatsIncrease.duration, effectStatsIncrease.interval);
         }
+        
 
         private void IncreaseEffectStats(int damage, float duration, float interval)
         {
