@@ -1,12 +1,11 @@
-using UnityEngine;
 using Monsters;
-using Towers.Fire;
+using Towers.Poison;
 
 namespace Towers.Projectile
 {
-    public class FireEffect : BaseEffect
+    public class PoisonEffect : BaseEffect
     {
-        public FireEffect(FireTower.EffectStats effectStats, BaseTower.TowerType type)
+        public PoisonEffect(PoisonTower.EffectStats effectStats, BaseTower.TowerType type)
         {
             Value = effectStats.damage;
             Interval = effectStats.interval;
@@ -19,5 +18,6 @@ namespace Towers.Projectile
         {
             monster.GainDamage((int)Value, null);
         }
+        
     }
 }
