@@ -372,6 +372,7 @@ namespace Towers
             statsUI.StatsBtns.projectileSpeed.interactable = points > 0;
             
             statsUI.EffectStatsBtns.duration.interactable = points > 0;
+            statsUI.EffectStatsBtns.interval.gameObject.SetActive(true);
             statsUI.EffectStatsBtns.interval.interactable = points > 0;
             statsUI.EffectStatsBtns.value.interactable = points > 0;
             

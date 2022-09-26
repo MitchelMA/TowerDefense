@@ -1,23 +1,23 @@
-using UnityEngine;
 using Monsters;
-using Towers.Fire;
+using Towers.Ice;
 
 namespace Towers.Projectile
 {
-    public class FireEffect : BaseEffect
+    public class IceEffect : BaseEffect
     {
-        public FireEffect(FireTower.EffectStats effectStats, BaseTower.TowerType type)
+        public IceEffect(IceTower.EffectStats effectStats, BaseTower.TowerType type)
         {
-            Value = effectStats.damage;
-            Interval = effectStats.interval;
+            Value = effectStats.slowness;
+            Interval = 0.1f;
             CurrentTimeout = Interval;
             Duration = effectStats.duration;
             TargetColour = effectStats.effectColour;
             Type = type;
         }
+        
         public override void ApplyEffect(BaseMonster monster)
         {
-            monster.GainDamage((int)Value, null);
+            // do absolutely nothing, here
         }
 
         public override bool WearOn(BaseMonster monster)
@@ -26,14 +26,15 @@ namespace Towers.Projectile
             if (!successful)
                 return false;
             
-            // extra code that could be added when effect successfully wore onto the monster:
+            // add the slowness effect
+            monster.SetSpeed(monster.Speed / Value);
             return true;
         }
 
         public override void WornOff(BaseMonster monster)
         {
             base.WornOff(monster);
-            // extra code that could be added when effect wore of the monster:
+            monster.SetSpeed(monster.Speed * Value);
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Towers.Projectile
 {
     public abstract class BaseEffect
     {
-        public int Value { get; protected set; }
+        public float Value { get; protected set; }
 
         public float Interval { get; protected set; }
 
