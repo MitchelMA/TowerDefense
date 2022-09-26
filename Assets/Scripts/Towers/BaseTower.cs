@@ -103,6 +103,7 @@ namespace Towers
         protected Stats CurrentStats;
         protected XpStats CurrentXpStats;
         protected float currentShootTimeout;
+        protected const float ProjectileLifeTime = 5;
 
         #endregion
 
@@ -258,6 +259,7 @@ namespace Towers
             var clone = Instantiate(projectilePrefab, projectileParent);
             clone.transform.position = transform.position;
             clone.Setup(predictionDir, CurrentStats.projectileSpeed, CurrentStats.damage, effect, this);
+            Destroy(clone.gameObject, ProjectileLifeTime);
 
             // reset the timeout
             currentShootTimeout = 1 / CurrentStats.fireRate;

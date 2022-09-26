@@ -65,7 +65,9 @@ namespace Monsters
         private Vector3 _curpos;
         public Vector3 UDir => (_curpos - _lastpos).normalized;
         public float Speed => PathTraverser.Speed;
-    
+
+        public event EventHandler<int> HpChange; 
+
         // Start is called before the first frame update
         protected virtual void Start()
         {
@@ -186,6 +188,7 @@ namespace Monsters
             // null is allowed to make the damageGiver anonymous
             if(from is not null)
                 AddHitBy(from);
+            HpChange?.Invoke(this, CurrentStats.hp);
             if (CurrentStats.hp <= 0)
             {
                 WasKilled = true;

@@ -14,33 +14,14 @@ namespace Towers.Projectile
         public BaseEffect Effect { get; private set; }
         public BaseTower Owner { get; private set; }
 
-        // life-time in seconds;
-        private float _lifeTime = 5;
-        
-        // Start is called before the first frame update
-        private void Start()
-        {
-        
-        }
-
         // Update is called once per frame
         private void Update()
         {
-            if (_lifeTime <= 0)
-            {
-                Destroy(gameObject);
-                return;
-            }
             transform.Translate(UDir * Speed * Time.deltaTime);
-            _lifeTime -= Time.deltaTime;
         }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            // if it hit a monster, even though the life-time went below zero
-            if (_lifeTime <= 0)
-                return;
-            
             if (!other.tag.Equals(enemyTag))
                 return;
             
@@ -48,6 +29,7 @@ namespace Towers.Projectile
                 return;
             
             monster.GainDamage(Damage, Owner);
+            // `Effect` may be null (for the possibility of towers not having an effect on their projectiles)
             Effect?.WearOn(monster);
             Destroy(gameObject);
         }

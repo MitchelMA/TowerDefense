@@ -19,7 +19,6 @@ namespace Towers
         private BaseTower _currentTower;
         private TowerFactory _factory;
         private CurrencyController _currencyController;
-        private Color _indicatorColour;
         private bool _indicating = false;
 
         public bool Indicating
@@ -59,7 +58,6 @@ namespace Towers
                 Debug.LogError("There wasn't a complete CurrencyController in this scene");
             }
 
-            _indicatorColour = indicator.color;
             _selectable = GetComponent<TowerSelectable>();
             _selectable.OnStatusChanged += OnSelect;
             _currencyController.MoneyChanged += HandleCurrencyChange;
@@ -87,13 +85,12 @@ namespace Towers
 
         private void IndicatingStart()
         {
-            indicator.color = new Color(_indicatorColour.r, _indicatorColour.g, _indicatorColour.b, _indicatorColour.a);
+            indicator.gameObject.SetActive(true);
         }
 
         private void IndicatingEnd()
         {
-            transform.localScale = Vector3.one;
-            indicator.color = new Color(_indicatorColour.r, _indicatorColour.g, _indicatorColour.b, 0);
+            indicator.gameObject.SetActive(false);
         }
 
         private void OnSelect(object sender, bool selectedStatus)
