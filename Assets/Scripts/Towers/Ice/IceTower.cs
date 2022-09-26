@@ -6,25 +6,27 @@ namespace Towers.Ice
 {
     public partial class IceTower : BaseTower
     {
-        [Serializable]
-        public struct EffectStats
+        protected override bool CreateEffect(out BaseEffect effect)
         {
-            public float slowness;
-            public float duration;
-            public Color effectColour;
+            return base.CreateEffect(out effect);
         }
 
-        [Serializable]
-        public struct EffectStatsUp
+        private void EffectStatsHaveChanged(object sender, EffectStatsDiff diff)
         {
-            public float slowness;
-            public float duration;
+            if(parentNode.Selectable.IsSelected)
+                UpdateStatsDisplay();
         }
 
-        public struct EffectStatsDiff
+        protected override void OnDestroy()
         {
-            public EffectStats Previous;
-            public EffectStats Current;
+            base.OnDestroy();
+            EffectStatsChanged -= EffectStatsHaveChanged;
+        }
+
+        public override void UpdateStatsDisplay()
+        {
+            base.UpdateStatsDisplay();
+            
         }
     }
 }

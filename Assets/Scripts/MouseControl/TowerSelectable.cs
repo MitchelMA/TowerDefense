@@ -52,7 +52,6 @@ namespace MouseControl
             uiBuy.CloseBtn.onClick.RemoveAllListeners();
             uiBuy.CloseBtn.onClick.AddListener(Deselect);
             
-            Debug.Log(uiBuy.BuyButtons.fire);
             uiBuy.BuyButtons.fire.Button.onClick.RemoveAllListeners();
             uiBuy.BuyButtons.fire.Button.onClick.AddListener(delegate
             {

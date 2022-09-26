@@ -1,6 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using UI;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace MouseControl
 {
@@ -27,6 +31,9 @@ namespace MouseControl
         [SerializeField] private float sensitivity = 2f;
         [SerializeField] private MouseBtn mouseBtn = MouseBtn.Left;
         [SerializeField] private string[] selectableTags = new string[1];
+
+        [SerializeField] private GameObject towerStatsUI;
+        [SerializeField] private GameObject towerBuyUI;
 
         private MouseState _mouseState = MouseState.Idle;
 
@@ -99,19 +106,34 @@ namespace MouseControl
                     }
 
                     Vector3 worldPos = targetCamera.ScreenToWorldPoint(_onMouseUpPos);
-                    RaycastHit2D hitData = Physics2D.Raycast(worldPos, Vector2.zero, 0);
+                    RaycastHit2D[] hits = Physics2D.RaycastAll(worldPos, Vector2.zero, 0);
+                    BaseSelectable selectable = null;
+                    bool shouldSelect = false;
 
-                    if (hitData && selectableTags.Contains(hitData.collider.tag) &&
-                        hitData.collider.TryGetComponent(out BaseSelectable selectable))
+                    foreach (RaycastHit2D hit in hits)
                     {
-                        // Deselect the previous selected if it had `DeselectOnSelect` selectmode
+                        if (selectable is null && selectableTags.Contains(hit.collider.tag) &&
+                            hit.collider.TryGetComponent(out selectable))
+                        {
+                            shouldSelect = true;
+                        }
+
+                        if (hit.collider.gameObject == towerBuyUI || hit.collider.gameObject == towerStatsUI)
+                        {
+                            shouldSelect = false;
+                            break;
+                        }
+                    }
+
+                    if (shouldSelect && selectable is not null)
+                    {
                         if (_lastSelected is not null &&
                             _lastSelected.SelectMode == BaseSelectable.SelectType.DeselectOnSelect)
                         {
                             _lastSelected.Deselect();
                             _lastSelected = null;
                         }
-
+                        
                         selectable.Select();
                         _lastSelected = selectable;
                     }

@@ -1897,7 +1897,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -1911,7 +1911,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1000, y: 160}
   m_EdgeRadius: 0
 --- !u!1 &425281349
 GameObject:
@@ -3381,6 +3381,8 @@ MonoBehaviour:
   mouseBtn: 0
   selectableTags:
   - Tower
+  towerStatsUI: {fileID: 416728580}
+  towerBuyUI: {fileID: 1872121594}
 --- !u!4 &786915917
 Transform:
   m_ObjectHideFlags: 0
@@ -6325,8 +6327,8 @@ BoxCollider2D:
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_UsedByEffector: 1
+  m_UsedByComposite: 1
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
@@ -6336,9 +6338,9 @@ BoxCollider2D:
     adaptiveTilingThreshold: 0
     drawMode: 0
     adaptiveTiling: 0
-  m_AutoTiling: 0
+  m_AutoTiling: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1000, y: 160}
   m_EdgeRadius: 0
 --- !u!1 &1894701642
 GameObject:
