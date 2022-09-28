@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Health;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -46,6 +47,7 @@ namespace Monsters
         private bool _allWavesSpawned = false;
         private Mutex _leftMutex = new Mutex();
         private int _monstersLeft;
+        private HealthController _healthController;
 
         public int CurrentWaveTotal => _currentWaveTotalAmount;
         // standard set to false to false so the first wave doesn't automatically start when entered
@@ -61,6 +63,7 @@ namespace Monsters
         // Start is called before the first frame update
         private void Start()
         {
+            _healthController = GameObject.FindWithTag("HealthController").GetComponent<HealthController>();
             // setup the first wave
             SetupWave(0);
             UpdateWaveCounter();
@@ -200,7 +203,9 @@ namespace Monsters
                 StopWave();
                 if (_allWavesSpawned)
                 {
-                    FinishedAllWaves();
+                    if(_healthController.CurrentHealth > 0)
+                        FinishedAllWaves();
+                    
                     return;
                 }
                 SetupWave(_currentWave);

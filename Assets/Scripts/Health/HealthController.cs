@@ -19,6 +19,8 @@ namespace Health
         private int _currentHealth;
         private readonly Mutex _healthMutex = new Mutex();
 
+        public int CurrentHealth => _currentHealth;
+
         public event EventHandler<HealthChangeEventArgs> HealthChanged;
         public event EventHandler<WaveController> GameOver;
 
@@ -35,12 +37,6 @@ namespace Health
         
         public bool Deplete(int amount)
         {
-            if (_currentHealth - amount <= 0)
-            {
-                
-                GameOver?.Invoke(this, GameObject.FindWithTag("WaveController").GetComponent<WaveController>());
-                return false;
-            }
             _healthMutex.WaitOne();
             int old = _currentHealth;
             _currentHealth -= amount;
@@ -50,6 +46,11 @@ namespace Health
                 NewAmount = _currentHealth,
             });
             _healthMutex.ReleaseMutex();
+            if (_currentHealth <= 0)
+            {
+                GameOver?.Invoke(this, GameObject.FindWithTag("WaveController").GetComponent<WaveController>());
+                return false;
+            }
             return true;
         }
 

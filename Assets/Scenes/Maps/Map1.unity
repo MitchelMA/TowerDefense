@@ -31038,7 +31038,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 462d20936f40cbe46b43baedc854a4e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startHealth: 100
+  startHealth: 10
 --- !u!1 &760111329
 GameObject:
   m_ObjectHideFlags: 0
@@ -36908,8 +36908,8 @@ MonoBehaviour:
   - easyAmount: 10
     mediumAmount: 5
     hardAmount: 0
-    spawnTimeouts: {x: 0.5, y: 1}
-    difficultyMultiplier: 1
+    spawnTimeouts: {x: 0, y: 0}
+    difficultyMultiplier: 1.5
   spawnPoints:
   - {fileID: 1588149873}
   - {fileID: 1755668457}
