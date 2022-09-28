@@ -118,8 +118,6 @@ namespace Towers
 
         public bool PlaceTower(BaseTower.TowerType type)
         {
-            Debug.Log("PlaceTower was called");
-            
             if (!_factory.CreateTower(type, out GameObject tower))
             {
                 return false;

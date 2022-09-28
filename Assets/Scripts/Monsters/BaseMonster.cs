@@ -43,6 +43,7 @@ namespace Monsters
         [SerializeField] protected int referenceScreenHeight = 800;
         [SerializeField] protected float minAboveMonster = 40;
         [SerializeField] protected GameObject hpSliderPrefab;
+        [SerializeField] protected float hpSliderSize = 1;
         [SerializeField] protected Color fullHpColour;
         [SerializeField] protected Color depletedHpColour;
         protected GameObject CurrentHpSlider;
@@ -79,6 +80,7 @@ namespace Monsters
             collider = GetComponent<CircleCollider2D>();
             _curpos = transform.position;
             CurrentHpSlider = Instantiate(hpSliderPrefab, overlayCanvas);
+            CurrentHpSlider.transform.localScale = new Vector3(hpSliderSize, hpSliderSize, hpSliderSize);
             CurrencyController = GameObject.FindWithTag("CurrencyController").GetComponent<CurrencyController>();
         }
 
@@ -89,6 +91,16 @@ namespace Monsters
             _lastpos = _curpos;
             _curpos = transform.position;
             
+            
+            if(Effects.Count > 0) UpdateStatuses();
+            
+            // update the hp-slider
+            if(!WasKilled)
+                UpdateHPUI();
+        }
+
+        protected void UpdateStatuses()
+        {
             List<BaseEffect> woreOff = new List<BaseEffect>();
             foreach (BaseEffect effect in Effects)
             {
@@ -115,10 +127,6 @@ namespace Monsters
                 wornOff.WornOff(this);
                 Effects.Remove(wornOff);
             }
-            
-            // update the hp-slider
-            if(!WasKilled)
-                UpdateHPUI();
         }
 
         protected virtual void OnDestroy()
