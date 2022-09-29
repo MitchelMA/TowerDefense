@@ -44,6 +44,7 @@ namespace Towers.Ice
                 CurrentXpStats.lvlPoints--;
                 parentNode.Indicating = false;
                 UpdateStatsBtns();
+                UpdateStatsDisplay();
             });
             
             // don't show the interval as it's not of importance 
@@ -56,6 +57,7 @@ namespace Towers.Ice
                 CurrentXpStats.lvlPoints--;
                 parentNode.Indicating = false;
                 UpdateStatsBtns();
+                UpdateStatsDisplay();
             });
         }
 

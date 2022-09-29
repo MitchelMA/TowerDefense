@@ -69,7 +69,7 @@ namespace MouseControl
             {
                 _mouseState = MouseState.Move;
                 // Have the controlled Camera follow the mouse after OnmouseDown and moving
-                _controlledCamera.FollowMouse(_onMouseDownPos);
+                _controlledCamera.StartFollowMouse(_onMouseDownPos);
             }
 
             if (Input.GetMouseButtonUp((int) mouseBtn))

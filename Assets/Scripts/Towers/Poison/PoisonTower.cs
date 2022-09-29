@@ -43,6 +43,7 @@ namespace Towers.Poison
                 CurrentXpStats.lvlPoints--;
                 parentNode.Indicating = false;
                 UpdateStatsBtns();
+                UpdateStatsDisplay();
             });
             
             statsUI.EffectStatsBtns.interval.onClick.RemoveAllListeners();
@@ -52,6 +53,7 @@ namespace Towers.Poison
                 CurrentXpStats.lvlPoints--;
                 parentNode.Indicating = false;
                 UpdateStatsBtns();
+                UpdateStatsDisplay();
             });
             
             statsUI.EffectStatsBtns.value.onClick.RemoveAllListeners();
@@ -61,6 +63,7 @@ namespace Towers.Poison
                 CurrentXpStats.lvlPoints--;
                 parentNode.Indicating = false;
                 UpdateStatsBtns();
+                UpdateStatsDisplay();
             });
         }
 

@@ -383,6 +383,7 @@ namespace Towers
                 CurrentXpStats.lvlPoints--;
                 parentNode.Indicating = false;
                 UpdateStatsBtns();
+                UpdateStatsDisplay();
             });
             
             statsUI.StatsBtns.radius.onClick.RemoveAllListeners();
@@ -391,6 +392,7 @@ namespace Towers
                 IncreaseBaseStats(0, statsIncrease.radius, 0, 0);
                 CurrentXpStats.lvlPoints--;
                 UpdateStatsBtns();
+                UpdateStatsDisplay();
             });
             
             statsUI.StatsBtns.fireRate.onClick.RemoveAllListeners();
@@ -400,6 +402,7 @@ namespace Towers
                 CurrentXpStats.lvlPoints--;
                 parentNode.Indicating = false;
                 UpdateStatsBtns();
+                UpdateStatsDisplay();
             });
             
             statsUI.StatsBtns.projectileSpeed.onClick.RemoveAllListeners();
@@ -409,6 +412,7 @@ namespace Towers
                 CurrentXpStats.lvlPoints--;
                 parentNode.Indicating = false;
                 UpdateStatsBtns();
+                UpdateStatsDisplay();
             });
         }
 

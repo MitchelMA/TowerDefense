@@ -15,6 +15,9 @@ namespace MouseControl
         private Vector3 _curWorldPos;
         private Vector3 _moveEndWorldPos;
 
+        private Vector3 _cameraStartPos;
+        private Vector3 _cameraEndPos;
+
         private Camera _camera;
         // Start is called before the first frame update
         private void Start()
@@ -30,41 +33,48 @@ namespace MouseControl
         {
             if (!_followsMouse)
                 return;
-
-            _curWorldPos = _camera.ScreenToViewportPoint(Input.mousePosition - _moveStartWorldPos);
-            Vector3 moveX = new Vector3(_curWorldPos.x * dragSpeed.x, 0, 0) * Time.deltaTime;
-            Vector3 moveY = new Vector3(0, _curWorldPos.y * dragSpeed.y, 0) * Time.deltaTime;
-
-            if(InXAxisBounds(moveX))
-                transform.Translate(moveX);
             
-            if(InYAxisBounds(moveY))
-                transform.Translate(moveY);
-
+            FollowMouse();
         }
 
-        public void FollowMouse(Vector3 from)
+        private void FollowMouse()
         {
-            _moveStartWorldPos = new Vector3(from.x, from.y, from.z);
+            _curWorldPos = _camera.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+            float xNew = InXBoundValue(_cameraStartPos.x - (_curWorldPos.x - _moveStartWorldPos.x));
+            float yNew = InYBoundValue(_cameraStartPos.y - (_curWorldPos.y - _moveStartWorldPos.y));
+
+            transform.position = new Vector3(xNew, yNew, transform.position.z);
+        }
+
+        public void StartFollowMouse(Vector3 from)
+        {
+            _cameraStartPos = transform.position;
+            _moveStartWorldPos = _camera.ScreenToWorldPoint(from) - transform.position;
             _followsMouse = true;
         }
 
         public void StopFollow(Vector3 to)
         {
-            _moveEndWorldPos = new Vector3(to.x, to.y, to.z);
+            _cameraEndPos = transform.position;
+            // _moveEndWorldPos = new Vector3(to.x, to.y, to.z);
+            _moveEndWorldPos = _camera.ScreenToWorldPoint(to) - transform.position;
             _followsMouse = false;
         }
 
-        private bool InXAxisBounds(Vector3 addition)
+        private float InXBoundValue(float xValue)
         {
-            Vector3 pos = transform.position + addition;
-            return pos.x > bounds.w && pos.x < bounds.y;
+            if (xValue > bounds.y || xValue < bounds.w)
+                return transform.position.x;
+
+            return xValue;
         }
 
-        private bool InYAxisBounds(Vector3 addition)
+        private float InYBoundValue(float yValue)
         {
-            Vector3 pos = transform.position + addition;
-            return pos.y > bounds.z && pos.y < bounds.x;
+            if (yValue > bounds.x || yValue < bounds.z)
+                return transform.position.y;
+
+            return yValue;
         }
     }
 }
