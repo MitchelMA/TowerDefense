@@ -36910,6 +36910,11 @@ MonoBehaviour:
     hardAmount: 0
     spawnTimeouts: {x: 0.5, y: 1}
     difficultyMultiplier: 1.2
+  - easyAmount: 5
+    mediumAmount: 10
+    hardAmount: 5
+    spawnTimeouts: {x: 0.2, y: 0.5}
+    difficultyMultiplier: 1.5
   spawnPoints:
   - {fileID: 1588149873}
   - {fileID: 1755668457}

@@ -7,7 +7,6 @@ namespace MouseControl
     public class MouseControlledCamera : MonoBehaviour
     {
         [SerializeField] private Vector4 bounds = new Vector4(10, 10, -10, -10);
-        [SerializeField] private Vector2 dragSpeed = new Vector2(50, 50);
 
         private bool _followsMouse = false;
 

@@ -30,7 +30,7 @@ namespace Towers.Ice
             statsUI.EffectStatsTexts.value.text = $"Slowness: {Math.Ceiling(_currentEffectStats.slowness * 100)}%";
             // don't show show the interval as it's not of importance
             statsUI.EffectStatsTexts.interval.text = "";
-            statsUI.EffectStatsTexts.duration.text = $"Duration: {_currentEffectStats.duration}";
+            statsUI.EffectStatsTexts.duration.text = $"Duration: {_currentEffectStats.duration:0.00}";
         }
 
         public override void UpdateStatsBtns()
