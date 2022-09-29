@@ -73,3 +73,6 @@ crashlytics-build.properties
 
 # Rider .idea folder
 *.idea
+
+# Obsidian editor
+*.obsidian
