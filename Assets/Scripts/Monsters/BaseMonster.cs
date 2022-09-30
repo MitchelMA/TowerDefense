@@ -52,7 +52,7 @@ namespace Monsters
         public MonsterType Type => type;
 
         protected PathTraverser PathTraverser;
-        protected CircleCollider2D collider;
+        protected CircleCollider2D HitCollider;
         protected CurrencyController CurrencyController;
 
 
@@ -77,7 +77,7 @@ namespace Monsters
             
             SetSpeed(baseStats.speed);
             CurrentStats.hp = baseStats.hp;
-            collider = GetComponent<CircleCollider2D>();
+            HitCollider = GetComponent<CircleCollider2D>();
             _curpos = transform.position;
             CurrentHpSlider = Instantiate(hpSliderPrefab, overlayCanvas);
             CurrentHpSlider.transform.localScale = new Vector3(hpSliderSize, hpSliderSize, hpSliderSize);

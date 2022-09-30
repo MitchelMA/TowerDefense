@@ -62,6 +62,7 @@ namespace Towers
             _selectable.OnStatusChanged += OnSelect;
             _currencyController.MoneyChanged += HandleCurrencyChange;
             IndicatingStateChange += HandleIndicatingStateChange;
+            Indicating = true;
         }
 
         private void HandleCurrencyChange(object sender, ulong newAmount)
