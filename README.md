@@ -7,5 +7,5 @@ Het doel van het spel is de monsters, in dit geval een prachtig plaatje van Gera
 
 ## Flowchart van Game-mechanic
 Dit is een flowchart van de _MouseController_.  
-De _MouseController_ bepaald hoe er met de muis moet worden omgegaan, of deze dus de camera bestuurd of een selecteerbaar element selecteerd.
+De _MouseController_ bepaald hoe er met de muis moet worden omgegaan, of deze dus de camera bestuurd of een selecteerbaar element selecteerd.  
 ![Flowchar van MouseController](./chrome_koC6aNowtM.png)
