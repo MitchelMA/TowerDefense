@@ -7,15 +7,12 @@ namespace Towers
 {
     public class CreateTower : MonoBehaviour
     {
-
-        [SerializeField]
-        private TowerFactory towerFactory;
         [SerializeField]
         private Transform towerParent;
 
         public void InstantiateTower(int type)
         {
-            if (!towerFactory.CreateTower(type, out GameObject tower))
+            if (!TowerFactory.Instance.CreateTower(type, out GameObject tower))
             {
                 return;
             }

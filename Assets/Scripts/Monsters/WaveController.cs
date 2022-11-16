@@ -7,10 +7,11 @@ using Health;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Util;
 
 namespace Monsters
 {
-    public class WaveController : MonoBehaviour
+    public class WaveController : GenericSingleton<WaveController>
     {
         #region Structs
 
@@ -36,7 +37,6 @@ namespace Monsters
 
         [SerializeField] private WaveData[] waves = new WaveData[1];
         [SerializeField] private SpawnPoint[] spawnPoints = new SpawnPoint[1];
-        [SerializeField] private MonsterFactory factory;
         [SerializeField] private Transform monstersParent;
         [SerializeField] private UIElements ui;
 
@@ -47,7 +47,6 @@ namespace Monsters
         private bool _allWavesSpawned = false;
         private Mutex _leftMutex = new Mutex();
         private int _monstersLeft;
-        private HealthController _healthController;
 
         public int CurrentWaveTotal => _currentWaveTotalAmount;
         // standard set to false to false so the first wave doesn't automatically start when entered
@@ -63,7 +62,6 @@ namespace Monsters
         // Start is called before the first frame update
         private void Start()
         {
-            _healthController = GameObject.FindWithTag("HealthController").GetComponent<HealthController>();
             // setup the first wave
             SetupWave(0);
             UpdateWaveCounter();
@@ -100,7 +98,7 @@ namespace Monsters
 
         private bool SpawnMonster(BaseMonster.MonsterType type, float multiplier)
         {
-            if (!factory.CreateMonster(type, out GameObject monster))
+            if (!MonsterFactory.Instance.CreateMonster(type, out GameObject monster))
                 return false;
 
             SpawnPoint chosenPoint = spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Length)];
@@ -203,7 +201,7 @@ namespace Monsters
                 StopWave();
                 if (_allWavesSpawned)
                 {
-                    if(_healthController.CurrentHealth > 0)
+                    if(HealthController.Instance.CurrentHealth > 0)
                         FinishedAllWaves();
                     
                     return;

@@ -5,10 +5,11 @@ using UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Util;
 
 namespace MouseControl
 {
-    public class MouseController : MonoBehaviour
+    public class MouseController : GenericSingleton<MouseController>
     {
         #region Enums
         public enum MouseState

@@ -6,10 +6,11 @@ using Towers;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using Util;
 
 namespace Currency
 {
-    public class CurrencyController : MonoBehaviour
+    public class CurrencyController : GenericSingleton<CurrencyController>
     {
         [Serializable]
         private struct TowerPriceCombination

@@ -7,7 +7,6 @@ namespace Health
     {
         [SerializeField] private Color fullColour;
         [SerializeField] private Color depletedColour;
-        private HealthController _controller;
 
         private Slider _slider;
 
@@ -17,19 +16,12 @@ namespace Health
         {
             _slider = GetComponent<Slider>();
             _healthColour = transform.GetChild(1).GetComponent<Image>();
-            _controller = GameObject.FindWithTag("HealthController").GetComponent<HealthController>();
-            _controller.HealthChanged += UpdateHealth;
-        }
-
-        // Update is called once per frame
-        private void Update()
-        {
-        
+            HealthController.Instance.HealthChanged += UpdateHealth;
         }
 
         private void UpdateHealth(object sender, HealthController.HealthChangeEventArgs args)
         {
-            _slider.value = args.NewAmount / (float)_controller.StartHealth;
+            _slider.value = args.NewAmount / (float)HealthController.Instance.StartHealth;
             _healthColour.color = Color.Lerp(depletedColour, fullColour, _slider.value);
         }
     }

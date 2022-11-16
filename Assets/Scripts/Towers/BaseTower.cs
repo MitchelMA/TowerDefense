@@ -81,7 +81,6 @@ namespace Towers
         protected CircleCollider2D Collider;
         
         protected TowerNode parentNode;
-        protected CurrencyController _currencyController;
 
         #region Public Properties
         
@@ -140,7 +139,6 @@ namespace Towers
             parentNode = transform.parent.GetComponent<TowerNode>();
             parentNode.Selectable.OnStatusChanged += OnParentSelect;
             BaseStatsChanged += StatsHaveChanged;
-            _currencyController = GameObject.FindWithTag("CurrencyController").GetComponent<CurrencyController>();
         }
 
         protected void OnParentSelect(object sender, bool selectedStatus)
@@ -347,8 +345,9 @@ namespace Towers
                 if (type == TowerType.Unset)
                     return;
 
-                ulong returnPrice = (ulong)(_currencyController.GetPriceOfType(type) * 0.5f);
-                _currencyController.Add(returnPrice);
+                var controller = CurrencyController.Instance;
+                ulong returnPrice = (ulong)(controller.GetPriceOfType(type) * 0.5f);
+                controller.Add(returnPrice);
             });
 
             // update the base-stats

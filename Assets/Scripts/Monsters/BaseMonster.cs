@@ -37,7 +37,6 @@ namespace Monsters
         #endregion
 
         [SerializeField] protected MonsterType type;
-        protected WaveController waveController;
         [SerializeField] protected Transform overlayCanvas;
         [SerializeField] protected Camera targetCamera;
         [SerializeField] protected int referenceScreenHeight = 800;
@@ -53,7 +52,6 @@ namespace Monsters
 
         protected PathTraverser PathTraverser;
         protected CircleCollider2D HitCollider;
-        protected CurrencyController CurrencyController;
 
 
         protected readonly List<BaseEffect> Effects = new List<BaseEffect>();
@@ -73,7 +71,6 @@ namespace Monsters
         protected virtual void Start()
         {
             PathTraverser = GetComponent<PathTraverser>();
-            waveController = GameObject.FindWithTag("WaveController").GetComponent<WaveController>();
             
             SetSpeed(baseStats.speed);
             CurrentStats.hp = baseStats.hp;
@@ -81,7 +78,6 @@ namespace Monsters
             _curpos = transform.position;
             CurrentHpSlider = Instantiate(hpSliderPrefab, overlayCanvas);
             CurrentHpSlider.transform.localScale = new Vector3(hpSliderSize, hpSliderSize, hpSliderSize);
-            CurrencyController = GameObject.FindWithTag("CurrencyController").GetComponent<CurrencyController>();
         }
 
         // Update is called once per frame
@@ -131,14 +127,14 @@ namespace Monsters
 
         protected virtual void OnDestroy()
         {
-            waveController.DecreaseLeft();
+            WaveController.Instance.DecreaseLeft();
             // destroy the enemy hp-bar
             Destroy(CurrentHpSlider);
             // calculate its value only when it was killed
             if (WasKilled)
             {
                 int value = (int)(baseStats.hp / 2 + baseStats.speed*2);
-                CurrencyController.Add(value);
+                CurrencyController.Instance.Add(value);
                 foreach (BaseTower hit in HitBy)
                     hit.XpUp(value);
             }

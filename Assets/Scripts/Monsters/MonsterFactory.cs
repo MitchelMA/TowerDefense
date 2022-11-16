@@ -1,9 +1,10 @@
 using System;
 using UnityEngine;
+using Util;
 
 namespace Monsters
 {
-    public class MonsterFactory : MonoBehaviour
+    public class MonsterFactory : GenericSingleton<MonsterFactory>
     {
         [Serializable]
         private struct FactoryEntry

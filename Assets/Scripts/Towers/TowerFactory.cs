@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using Util;
 
 namespace Towers
 {
-    public class TowerFactory : MonoBehaviour
+    public class TowerFactory : GenericSingleton<TowerFactory>
     {
         [Serializable]
         private struct FactoryEntry

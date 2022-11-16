@@ -9,20 +9,19 @@ namespace Currency
     {
         [SerializeField] private BaseTower.TowerType buyType;
         private ulong buyValue;
-        private CurrencyController _controller;
 
         public Button Button { get; private set; }
         public Text Text { get; private set; }
 
         private void Awake()
         {
+            var controller = CurrencyController.Instance;
             Button = GetComponentInChildren<Button>();
             Text = transform.GetChild(1).GetComponent<Text>();
-            _controller = GameObject.FindWithTag("CurrencyController").GetComponent<CurrencyController>();
-            buyValue = _controller.GetPriceOfType(buyType);
+            buyValue = controller.GetPriceOfType(buyType);
             Text.text = $"{buyValue} $";
-            _controller.MoneyChanged += CheckAvailable;
-            CheckAvailable(_controller, _controller.Amount);
+            controller.MoneyChanged += CheckAvailable;
+            CheckAvailable(controller, controller.Amount);
         }
 
         // Start is called before the first frame update
@@ -33,9 +32,10 @@ namespace Currency
 
         private void OnEnable()
         {
+            var controller = CurrencyController.Instance;
             // simulate the event
-            if(_controller)
-                CheckAvailable(_controller, _controller.Amount);
+            if(controller)
+                CheckAvailable(controller, controller.Amount);
         }
 
         // Update is called once per frame
@@ -51,10 +51,10 @@ namespace Currency
 
         public void BuyTower(TowerNode node, BaseTower.TowerType type)
         {
-            if (!_controller.Deplete(buyValue))
+            if (!CurrencyController.Instance.Deplete(buyValue))
                 return;
             if(!node.PlaceTower(type))
-                _controller.Add(buyValue);
+                CurrencyController.Instance.Add(buyValue);
         }
     }
 }

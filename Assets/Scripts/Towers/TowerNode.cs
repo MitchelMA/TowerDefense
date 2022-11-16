@@ -17,8 +17,6 @@ namespace Towers
         [SerializeField] private float indicatorSeries;
         private float _seriesProgression = 0;
         private BaseTower _currentTower;
-        private TowerFactory _factory;
-        private CurrencyController _currencyController;
         private bool _indicating = false;
 
         public bool Indicating
@@ -48,19 +46,9 @@ namespace Towers
         // Start is called before the first frame update
         private void Start()
         {
-            if (!GameObject.FindWithTag("TowerFactory").TryGetComponent(out _factory))
-            {
-                Debug.LogError("There wasn't a complete TowerFactory in this scene", this);
-            }
-
-            if (!GameObject.FindWithTag("CurrencyController").TryGetComponent(out _currencyController))
-            {
-                Debug.LogError("There wasn't a complete CurrencyController in this scene");
-            }
-
             _selectable = GetComponent<TowerSelectable>();
             _selectable.OnStatusChanged += OnSelect;
-            _currencyController.MoneyChanged += HandleCurrencyChange;
+            CurrencyController.Instance.MoneyChanged += HandleCurrencyChange;
             IndicatingStateChange += HandleIndicatingStateChange;
             Indicating = true;
         }
@@ -70,7 +58,7 @@ namespace Towers
             if (HasTower)
                 return;
 
-            List<ulong> sorted = _currencyController.TowerPrices;
+            List<ulong> sorted = CurrencyController.Instance.TowerPrices;
             sorted.Sort();
             ulong lowest = sorted[0];
             Indicating = newAmount >= lowest;
@@ -119,7 +107,7 @@ namespace Towers
 
         public bool PlaceTower(BaseTower.TowerType type)
         {
-            if (!_factory.CreateTower(type, out GameObject tower))
+            if (!TowerFactory.Instance.CreateTower(type, out GameObject tower))
             {
                 return false;
             }

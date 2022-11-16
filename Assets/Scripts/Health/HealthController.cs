@@ -3,10 +3,11 @@ using System.Threading;
 using Monsters;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Util;
 
 namespace Health
 {
-    public class HealthController : MonoBehaviour
+    public class HealthController : GenericSingleton<HealthController>
     {
         public struct HealthChangeEventArgs
         {
@@ -22,7 +23,7 @@ namespace Health
         public int CurrentHealth => _currentHealth;
 
         public event EventHandler<HealthChangeEventArgs> HealthChanged;
-        public event EventHandler<WaveController> GameOver;
+        public event EventHandler GameOver;
 
         private void Start()
         {
@@ -48,7 +49,7 @@ namespace Health
             _healthMutex.ReleaseMutex();
             if (_currentHealth <= 0)
             {
-                GameOver?.Invoke(this, GameObject.FindWithTag("WaveController").GetComponent<WaveController>());
+                GameOver?.Invoke(this, null);
                 return false;
             }
             return true;
@@ -67,9 +68,10 @@ namespace Health
             _healthMutex.ReleaseMutex();
         }
 
-        private void OnGameOver(object sender, WaveController waveController)
+        private void OnGameOver(object sender, EventArgs e)
         {
-            Debug.Log($"YOU MADE IT TILL WAVE {waveController.CurrentWave} WITH {waveController.MonstersLeft} MONSTERS LEFT");
+            var instance = WaveController.Instance;
+            Debug.Log($"YOU MADE IT TILL WAVE {instance.CurrentWave} WITH {instance.MonstersLeft} MONSTERS LEFT");
             SceneManager.LoadScene("GameOverScene");
         }
     }
