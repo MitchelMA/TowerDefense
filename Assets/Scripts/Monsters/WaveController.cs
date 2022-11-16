@@ -101,6 +101,8 @@ namespace Monsters
             if (!MonsterFactory.Instance.CreateMonster(type, out GameObject monster))
                 return false;
 
+            print(monster); 
+            
             SpawnPoint chosenPoint = spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Length)];
             var clone = Instantiate(monster, monstersParent);
             chosenPoint.SetupMonster(clone, multiplier);

@@ -32451,12 +32451,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsters:
-  - type: 0
-    monster: {fileID: 662545979}
-  - type: 1
-    monster: {fileID: 1969628822}
-  - type: 2
-    monster: {fileID: 1290367217}
+    _dict:
+    - name: Easy
+      value: {fileID: 662545979}
+    - name: Medium
+      value: {fileID: 662545979}
+    - name: Hard
+      value: {fileID: 1290367217}
 --- !u!1 &1017627005
 GameObject:
   m_ObjectHideFlags: 0
@@ -33223,12 +33224,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   towers:
-  - type: 1
-    tower: {fileID: 1894701642}
-  - type: 2
-    tower: {fileID: 1120508825}
-  - type: 3
-    tower: {fileID: 383535093}
+    _dict:
+    - name: Fire
+      value: {fileID: 1894701642}
+    - name: Poison
+      value: {fileID: 1120508825}
+    - name: Ice
+      value: {fileID: 383535093}
 --- !u!1 &1290367217
 GameObject:
   m_ObjectHideFlags: 0
@@ -37001,7 +37003,6 @@ MonoBehaviour:
   spawnPoints:
   - {fileID: 1588149873}
   - {fileID: 1755668457}
-  factory: {fileID: 1005115768}
   monstersParent: {fileID: 907945078}
   ui:
     nextBtn: {fileID: 1768675956}

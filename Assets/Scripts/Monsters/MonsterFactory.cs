@@ -6,23 +6,18 @@ namespace Monsters
 {
     public class MonsterFactory : GenericSingleton<MonsterFactory>
     {
-        [Serializable]
-        private struct FactoryEntry
-        {
-            public BaseMonster.MonsterType type;
-            public GameObject monster;
-        }
-
-        [SerializeField] private FactoryEntry[] monsters = new FactoryEntry[3];
+        [SerializeField] private SerializableDictionary<GameObject> monsters;
 
         public bool CreateMonster(BaseMonster.MonsterType type, out GameObject monster)
         {
-            foreach (FactoryEntry entry in monsters.AsSpan())
+            foreach (var (key, value) in monsters)
             {
-                if (!entry.type.Equals(type) || entry.monster is null)
+                if(value == null 
+                   ||!Enum.TryParse(key, out BaseMonster.MonsterType parseType)
+                   || parseType != type)
                     continue;
-
-                monster = entry.monster;
+                
+                monster = value;
                 return true;
             }
             

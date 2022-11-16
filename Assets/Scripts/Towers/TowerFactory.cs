@@ -9,23 +9,18 @@ namespace Towers
 {
     public class TowerFactory : GenericSingleton<TowerFactory>
     {
-        [Serializable]
-        private struct FactoryEntry
-        {
-            public BaseTower.TowerType type;
-            public GameObject tower;
-        }
-
-        [SerializeField] private FactoryEntry[] towers = new FactoryEntry[3];
+        [SerializeField] private SerializableDictionary<GameObject> towers;
 
         public bool CreateTower(BaseTower.TowerType type, out GameObject tower)
         {
-            foreach (FactoryEntry entry in towers.AsSpan())
+            foreach (var (key, value) in towers)
             {
-                if (!entry.type.Equals(type) || entry.tower is null)
+                if(value == null
+                   || !Enum.TryParse(key, out BaseTower.TowerType parseType)
+                   || parseType != type)
                     continue;
                 
-                tower = entry.tower;
+                tower = value;
                 return true;
             }
             
