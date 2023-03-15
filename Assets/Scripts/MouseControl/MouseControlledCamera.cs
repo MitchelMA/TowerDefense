@@ -10,6 +10,11 @@ namespace MouseControl
 
         private bool _followsMouse = false;
 
+        public bool FreeFollow { get; set; } = false;
+
+        public Camera Camera => _camera;
+
+
         private Vector3 _moveStartWorldPos;
         private Vector3 _curWorldPos;
         private Vector3 _moveEndWorldPos;
@@ -47,6 +52,9 @@ namespace MouseControl
 
         public void StartFollowMouse(Vector3 from)
         {
+            if (!FreeFollow)
+                return;
+            
             _cameraStartPos = transform.position;
             _moveStartWorldPos = _camera.ScreenToWorldPoint(from) - transform.position;
             _followsMouse = true;
